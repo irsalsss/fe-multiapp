@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import './global.css'
+import './styles/global.css';
 import AIChatbotPage from './app/AIChatbot'
 
 function App() {

@@ -7,9 +7,16 @@ interface ButtonIconProps {
   size: ButtonSize;
   icon: React.ReactNode;
   onClick?: () => void;
+  className?: string;
 }
 
-const ButtonIcon = ({ type, size, icon, onClick }: ButtonIconProps) => {
+const ButtonIcon = ({
+  type,
+  size,
+  icon,
+  onClick,
+  className,
+}: ButtonIconProps) => {
   const buttonSize = useMemo(() => {
     if (size === ButtonSize.Small) {
       return 'w-6 h-6';
@@ -27,6 +34,10 @@ const ButtonIcon = ({ type, size, icon, onClick }: ButtonIconProps) => {
       return 'bg-gray-700';
     }
 
+    if (type === ButtonType.Tertiary) {
+      return 'bg-gray-400';
+    }
+
     return 'bg-green-100';
   }, [type]);
 
@@ -36,7 +47,8 @@ const ButtonIcon = ({ type, size, icon, onClick }: ButtonIconProps) => {
       className={twMerge(
         'cursor-pointer rounded-lg flex items-center justify-center',
         buttonSize,
-        buttonType
+        buttonType,
+        className
       )}
       onClick={onClick}
     >

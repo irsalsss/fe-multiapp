@@ -1,9 +1,15 @@
-import ChatGPT from '../../../../assets/icons/chat-gpt.svg';
 import { format } from 'date-fns';
+import Markdown from 'react-markdown'
 
-const AnswerBubble = () => {
+import ChatGPT from '../../../../assets/icons/chat-gpt.svg';
+
+interface AnswerBubbleProps {
+  answer: string;
+}
+
+const AnswerBubble = ({ answer }: AnswerBubbleProps) => {
   return (
-    <div className="bg-gray-400 px-[22px] py-3 rounded-lg relative">
+    <div className="bg-[#28303F] px-[22px] py-3 rounded-lg relative w-full">
       <img
         src={ChatGPT}
         alt="chat-gpt"
@@ -17,13 +23,16 @@ const AnswerBubble = () => {
           {format(new Date(), 'dd MMM ▪ hh:mm a')}
         </span>
       </div>
-      <p className="text-[12px] leading-[16px] font-normal">
-        Usability testing is a technique used in user experience (UX) design to
-        evaluate a product or service by testing it with representative users.
-        The purpose of usability testing is to identify any usability problems,
-        collect quantitative and qualitative data on users' experiences, and
-        determine the overall user satisfaction with the product or service.
-      </p>
+      
+      <Markdown
+        components={{
+          p: ({ children }) => (
+            <p className="text-[12px] leading-[16px] font-normal">{children}</p>
+          ),
+        }}
+      >
+        {answer}
+      </Markdown>
     </div>
   );
 };

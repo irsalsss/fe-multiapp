@@ -3,13 +3,17 @@ import useSendAIMessageStore from '../../store/useSendAIMessageStore';
 import AnswerBubble from '../AnswerBubble';
 import QuestionBubble from '../QuestionBubble';
 import TodayDivider from '../TodayDivider';
+import { useGetListUserChatQuery } from '../../api/@query/use-get-list-user-chat';
 
 const ChatRoom = () => {
   const { answer } = useSendAIMessageStore(
     useShallow((state) => ({
       answer: state.answer,
-    })),
-  )
+    }))
+  );
+
+  const { data: listChat } = useGetListUserChatQuery();
+  console.log('listChat::: ', listChat);
 
   return (
     <div className="bg-gray-500 py-8 rounded-lg flex justify-center w-full overflow-y-auto">

@@ -1,10 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
 import './styles/global.css';
-import AIChatbotPage from './app/AIChatbot';
+import AIChatPage from './app/AIChat';
 import { ClerkProvider, SignIn, SignedIn, SignedOut } from '@clerk/clerk-react';
 import UnauthenticatedLayout from './components/layouts/UnauthenticatedLayout';
 import AuthenticatedLayout from './components/layouts/AuthenticatedLayout';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ROUTE_AI_CHAT } from './const/routes';
 
 const PUBLISHABLE_KEY =
   (import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string) || '';
@@ -35,7 +36,7 @@ const App = () => {
               </SignedIn>
             }
           >
-            <Route path="/ai-chatbot" element={<AIChatbotPage />} />
+            <Route path={ROUTE_AI_CHAT} element={<AIChatPage />} />
           </Route>
 
           {/* Unauthenticated Routes */}

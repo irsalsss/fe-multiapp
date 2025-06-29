@@ -3,26 +3,39 @@ import ButtonIcon from '../ButtonIcon';
 import { ButtonSize, ButtonType } from '../ButtonIcon/types';
 import { useState } from 'react';
 import useGoogleAI from '../../hooks/useGoogleAI';
+import { useSendChat } from '../../api/@mutation/use-send-chat';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEY_CONVERSATIONS } from '../../api/@query/use-get-conversations';
 
 const InputPrompt = () => {
   const [inputValue, setInputValue] = useState('');
 
+  const { mutateAsync: sendChat } = useSendChat();
   const { sendGoogleAIMessage } = useGoogleAI();
+  const queryClient = useQueryClient();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
   const handleSendMessage = async () => {
-    await sendGoogleAIMessage(inputValue);
-    setInputValue('');
+    await sendGoogleAIMessage({
+      message: inputValue,
+      onSuccess: async (title, description) => {
+        await sendChat({ title, description });
+        await queryClient.invalidateQueries({
+          queryKey: [QUERY_KEY_CONVERSATIONS],
+        });
+        setInputValue('');
+      },
+    });
   };
 
   const handlePressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       void handleSendMessage();
     }
-  }
+  };
 
   return (
     <div className="relative w-full">

@@ -31,4 +31,6 @@ html, body {
   --color-green-300: #1E3B36;
 
   --color-yellow-100: #FEC553;
+
+  --shadow-custom: 0px 19px 29px 0px #1E1F2233;
 }

@@ -19,14 +19,18 @@ interface ErrorResponse {
   statusCode: number;
 }
 
+interface FetchJsonOptions extends Omit<RequestInit, 'body'> {
+  body?: unknown;
+}
+
 export const fetchJson = async <JSONDataType = unknown>(
   input: string,
-  init?: RequestInit
+  options?: FetchJsonOptions
 ): Promise<JSONDataType> => {
   const API_URL = (import.meta.env.VITE_API_URL as string) || '';
   const url = API_URL + input;
 
-  const headers = new Headers(init?.headers);
+  const headers = new Headers(options?.headers);
   headers.set('Content-Type', 'application/json');
   headers.set('Accept', 'application/json');
   headers.set('X-Request-ID', uuidv4());
@@ -41,10 +45,22 @@ export const fetchJson = async <JSONDataType = unknown>(
     headers.set('Authorization', `Bearer ${token}`);
   }
 
-  const response = await fetch(url, {
-    ...init,
+  // Prepare the request configuration
+  const requestConfig: RequestInit = {
+    ...options,
     headers,
-  });
+    body: undefined,
+  };
+
+  // Handle JSON body for POST, PUT, PATCH methods
+  if (options?.body !== undefined) {
+    // Automatically set method to POST if not specified and body is provided
+    requestConfig.method ??= 'POST';
+
+    requestConfig.body = JSON.stringify(options.body);
+  }
+
+  const response = await fetch(url, requestConfig);
 
   let data: JSONDataType;
 

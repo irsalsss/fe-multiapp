@@ -1,8 +1,19 @@
 import { create } from 'zustand'
 
+export interface StreamChunk {
+  text: string;
+  timestamp: string;
+  chunkIndex: number;
+}
+
 interface Message {
   role: 'user' | 'model';
   content: string;
+  metadata?: {
+    model: string;
+    responseTimeMs: number;
+    streamChunks: StreamChunk[];
+  };
 }
 
 interface AIStore {

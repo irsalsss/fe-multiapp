@@ -1,9 +1,15 @@
-import { Outlet } from "react-router-dom"
+import { useUser } from '@clerk/clerk-react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { ROUTE_SIGN_IN } from '../../const/routes';
 
 const AuthenticatedLayout = () => {
-  return (
-    <Outlet />
-  )
-}
+  const { isLoaded, isSignedIn } = useUser();
 
-export default AuthenticatedLayout
+  if (isLoaded && !isSignedIn) {
+    return <Navigate to={ROUTE_SIGN_IN} replace />;
+  }
+
+  return <Outlet />;
+};
+
+export default AuthenticatedLayout;

@@ -1,20 +1,14 @@
-import React from 'react';
-import ChatRoom from './components/ChatRoom';
+import { Outlet } from 'react-router-dom';
 import SidebarAIChat from './components/SidebarAIChat';
 
-const AIChatbotPage: React.FC = () => {
+const AIChatPage: React.FC = () => {
   return (
     <div className="flex h-screen">
       <SidebarAIChat />
 
-      <div
-        id="ai-chatbot"
-        className="flex bg-gray-600 h-full w-full text-white"
-      >
-        <ChatRoom />
-      </div>
+      <Outlet />
     </div>
   );
 };
 
-export default AIChatbotPage;
+export default AIChatPage;

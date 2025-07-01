@@ -1,11 +1,13 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import './styles/global.css';
 import AIChatPage from './app/AIChat';
-import { ClerkProvider, SignIn, SignedIn, SignedOut } from '@clerk/clerk-react';
+import { ClerkProvider, SignIn } from '@clerk/clerk-react';
 import UnauthenticatedLayout from './components/layouts/UnauthenticatedLayout';
 import AuthenticatedLayout from './components/layouts/AuthenticatedLayout';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ROUTE_AI_CHAT } from './const/routes';
+import { ROUTE_AI_CHAT, ROUTE_SIGN_IN } from './const/routes';
+import ChatRoom from './app/AIChat/components/ChatRoom';
+import EmptyChatRoom from './app/AIChat/components/EmptyChatRoom';
 
 const PUBLISHABLE_KEY =
   (import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string) || '';
@@ -29,25 +31,18 @@ const App = () => {
       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
         <Routes>
           {/* Authenticated Routes */}
-          <Route
-            element={
-              <SignedIn>
-                <AuthenticatedLayout />
-              </SignedIn>
-            }
-          >
-            <Route path={ROUTE_AI_CHAT} element={<AIChatPage />} />
+          <Route element={<AuthenticatedLayout />}>
+            <Route path={ROUTE_AI_CHAT} element={<AIChatPage />}>
+              <Route path="" element={<EmptyChatRoom />} />
+              <Route path=":conversationId" element={<ChatRoom />} />
+            </Route>
+
+            <Route path="*" element={<Navigate to={ROUTE_AI_CHAT} />} />
           </Route>
 
           {/* Unauthenticated Routes */}
-          <Route
-            element={
-              <SignedOut>
-                <UnauthenticatedLayout />
-              </SignedOut>
-            }
-          >
-            <Route path="/" element={<SignIn />} />
+          <Route element={<UnauthenticatedLayout />}>
+            <Route path={ROUTE_SIGN_IN} element={<SignIn />} />
           </Route>
         </Routes>
       </ClerkProvider>

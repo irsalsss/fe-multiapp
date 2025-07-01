@@ -3,8 +3,9 @@ import { useGetConversationsQuery } from '../../api/@query/use-get-conversations
 import ConversationsItems from './ConversationsItems';
 
 const Conversations = () => {
-  const { data: conversations } = useGetConversationsQuery();
+  const { data } = useGetConversationsQuery();
   const params = useParams();
+  const conversations = data?.conversations ?? [];
   const conversationId = params.conversationId;
 
   const isActiveConversation = (id: string) => {
@@ -16,12 +17,13 @@ const Conversations = () => {
       data-testid="conversations-container"
       className="flex flex-col gap-[10px] px-4"
     >
-      {conversations?.map((item) => (
+      {conversations.map((item) => (
         <ConversationsItems
           key={item.id}
           title={item.title}
           description={item.description}
           createdAt={item.createdAt}
+          conversationId={item.id}
           isActive={isActiveConversation(item.id)}
         />
       ))}

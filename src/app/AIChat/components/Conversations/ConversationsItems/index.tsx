@@ -36,7 +36,7 @@ const ConversationsItems = ({
           )}
         />
 
-        <h5 className="text-[14px] font-semibold text-white capitalize">
+        <h5 className="text-[14px] font-semibold text-white capitalize truncate max-w-[90%]">
           {title}
         </h5>
         <p className="text-[12px] text-gray-200 line-clamp-2">{description}</p>

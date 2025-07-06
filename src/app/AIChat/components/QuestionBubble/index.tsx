@@ -8,7 +8,7 @@ interface QuestionBubbleProps {
 
 const QuestionBubble = ({ message, date }: QuestionBubbleProps) => {
   return (
-    <div className="bg-gray-400 px-[22px] py-3 rounded-lg relative w-full">
+    <div className="bg-gray-400 px-6 py-3 rounded-lg relative w-full">
       <img
         src={Avatar}
         alt="avatar"

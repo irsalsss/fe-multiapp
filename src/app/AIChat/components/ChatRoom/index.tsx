@@ -8,7 +8,8 @@ import { useParams } from 'react-router-dom';
 import { useGetChatQuery } from '../../api/@query/use-get-chat';
 import { useMemo } from 'react';
 import { UserRole } from '../../types/user-role.enum';
-import KebabMenuIcon from '../../../../assets/icons/kebab-menu-black.svg?react';
+import DropdownChat from '../DropdownChat';
+import MarkdownAnswer from '../MarkdownAnswer';
 
 const ChatRoom = () => {
   const params = useParams();
@@ -37,7 +38,7 @@ const ChatRoom = () => {
             {title}
           </h2>
 
-          <KebabMenuIcon className="cursor-pointer hover:opacity-80 hover:scale-110 transition-all duration-300" />
+          <DropdownChat />
         </div>
 
         <div className="bg-gray-500 py-8 rounded-lg flex justify-center w-full overflow-y-auto flex-1">
@@ -64,7 +65,7 @@ const ChatRoom = () => {
 
             <TodayDivider />
 
-            <p>{answer}</p>
+            <MarkdownAnswer answer={answer} />
 
             <div className="p-[40px]" />
           </div>

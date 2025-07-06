@@ -100,3 +100,68 @@ export function formatRelativeDate(date: Date | string | number, timezone?: stri
   
   return `${day} ${month} ${year}`;
 }
+
+/**
+ * Formats a date showing relative time for recent dates or full datetime for older dates
+ * @param date - The date to format
+ * @param timezone - Optional timezone (defaults to user's local timezone)
+ * @returns Formatted time string
+ */
+export function formatTimeAgo(date: Date | string | number, timezone?: string): string {
+  const targetDate = new Date(date);
+  const now = new Date(Date.now());
+  
+  // Default to UTC if no timezone is provided
+  let userTimezone: string = timezone ?? 'UTC';
+  try {
+    if (!timezone) {
+      userTimezone = 'UTC';
+    } else {
+      // Validate timezone
+      Intl.DateTimeFormat(undefined, { timeZone: userTimezone });
+    }
+  } catch {
+    userTimezone = 'UTC';
+  }
+  
+  // Calculate time difference in milliseconds
+  const timeDiff = now.getTime() - targetDate.getTime();
+  
+  // Convert to different units
+  const minutes = Math.floor(timeDiff / (1000 * 60));
+  const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+  
+  // 1. Just now (less than 1 minute)
+  if (minutes < 1) {
+    return 'Just now';
+  }
+  
+  // 2. ... min ago (less than 60 minutes)
+  if (minutes < 60) {
+    return `${minutes.toString()} min ago`;
+  }
+  
+  // 3. ... hour ago (less than 24 hours)
+  if (hours < 24) {
+    const hourText = hours === 1 ? 'hour' : 'hours';
+    return `${hours.toString()} ${hourText} ago`;
+  }
+  
+  // 4. dd MMM ▪ hh:mm a (for older dates)
+  const day = targetDate.toLocaleDateString('en-US', {
+    day: '2-digit',
+    timeZone: userTimezone
+  });
+  const month = targetDate.toLocaleDateString('en-US', {
+    month: 'short',
+    timeZone: userTimezone
+  });
+  const time = targetDate.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: userTimezone
+  });
+  
+  return `${day} ${month} ▪ ${time}`;
+}

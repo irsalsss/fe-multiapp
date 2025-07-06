@@ -1,15 +1,16 @@
-import { format } from 'date-fns';
-import Markdown from 'react-markdown'
+import Markdown from 'react-markdown';
 
 import ChatGPT from '../../../../assets/icons/chat-gpt.svg';
+import { formatTimeAgo } from '../../utils/date/date';
 
 interface AnswerBubbleProps {
   answer: string;
+  date: string;
 }
 
-const AnswerBubble = ({ answer }: AnswerBubbleProps) => {
+const AnswerBubble = ({ answer, date }: AnswerBubbleProps) => {
   return (
-    <div className="bg-[#28303F] px-[22px] py-3 rounded-lg relative w-full">
+    <div className="bg-[#28303F] p-6 rounded-lg relative w-full">
       <img
         src={ChatGPT}
         alt="chat-gpt"
@@ -20,14 +21,26 @@ const AnswerBubble = ({ answer }: AnswerBubbleProps) => {
           Response
         </span>
         <span className="text-[8px] leading-[8px] text-gray-200 opacity-60">
-          {format(new Date(), 'dd MMM ▪ hh:mm a')}
+          {formatTimeAgo(date)}
         </span>
       </div>
-      
+
       <Markdown
         components={{
           p: ({ children }) => (
-            <p className="text-[12px] leading-[16px] font-normal">{children}</p>
+            <p className="text-[12px] leading-[20px] font-normal mb-4 last:mb-0">
+              {children}
+            </p>
+          ),
+          ul: ({ children }) => (
+            <ul className="text-[12px] leading-[16px] font-normal list-decimal list-outside space-y-4 ml-2 pl-2 mb-4 last:mb-0">
+              {children}
+            </ul>
+          ),
+          li: ({ children }) => (
+            <li className="text-[12px] leading-[16px] font-normal ml-2 mb-2">
+              {children}
+            </li>
           ),
         }}
       >

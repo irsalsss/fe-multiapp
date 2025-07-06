@@ -52,7 +52,7 @@ const InputPrompt = () => {
       <input
         placeholder="Ask questions, or type ‘/’ for commands"
         type="text"
-        className="w-full h-[56px] rounded-lg bg-gray-400 pl-[20px] pr-[56px] py-[20px] placeholder:text-gray-200 placeholder:text-[12px] text-[12px]"
+        className="w-full h-[56px] rounded-lg bg-gray-400 border-gray-400 pl-[20px] pr-[56px] py-[20px] placeholder:text-gray-200 placeholder:text-[12px] text-[12px] focus:outline-none focus:border-gray-800 border"
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handlePressEnter}

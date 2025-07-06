@@ -23,14 +23,16 @@ const ConversationsItems = ({
     <Link to={`${ROUTE_AI_CHAT}/${conversationId}`} className="w-full">
       <div
         className={twMerge(
-          'py-[10px] px-6 flex flex-col gap-[6px] relative cursor-pointer',
-          isActive && 'bg-gray-700 rounded-[8px] mx-[-8px] px-8'
+          'group py-[10px] px-6 flex flex-col gap-[6px] relative cursor-pointer',
+          isActive && 'bg-gray-700 rounded-[8px] mx-[-8px] px-8',
+          'hover:bg-gray-700 hover:rounded-[8px] hover:mx-[-8px] hover:px-8 transition-all duration-500'
         )}
       >
         <ChatGPTIcon
           className={twMerge(
             'absolute top-[14px] left-1 rounded-lg h-3 w-3',
-            isActive && 'left-[12px]'
+            isActive && 'left-[12px]',
+            'group-hover:left-[12px]'
           )}
         />
 
@@ -41,7 +43,8 @@ const ConversationsItems = ({
         <p
           className={twMerge(
             'text-[10px] leading-[8px] text-gray-200 absolute top-[16px] right-0 opacity-60',
-            isActive && 'right-[8px]'
+            isActive && 'right-[8px]',
+            'group-hover:right-[8px]'
           )}
         >
           {formatRelativeDate(createdAt)}

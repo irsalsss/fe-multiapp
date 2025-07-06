@@ -1,7 +1,12 @@
 import Avatar from '../../../../assets/illus/avatar-man.png';
-import { format } from 'date-fns';
+import { formatTimeAgo } from '../../utils/date/date';
 
-const QuestionBubble = () => {
+interface QuestionBubbleProps {
+  message: string;
+  date: string;
+}
+
+const QuestionBubble = ({ message, date }: QuestionBubbleProps) => {
   return (
     <div className="bg-gray-400 px-[22px] py-3 rounded-lg relative w-full">
       <img
@@ -12,10 +17,10 @@ const QuestionBubble = () => {
       <div className="flex gap-2 items-center absolute top-[-16px]">
         <span className="text-[12px] leading-[16px] font-semibold">You</span>
         <span className="text-[8px] leading-[8px] text-gray-200 opacity-60">
-          {format(new Date(), 'dd MMM ▪ hh:mm a')}
+          {formatTimeAgo(date)}
         </span>
       </div>
-      <p className="text-[12px] leading-[16px] font-normal">Question Bubble</p>
+      <p className="text-[12px] leading-[16px] font-normal">{message}</p>
     </div>
   );
 };

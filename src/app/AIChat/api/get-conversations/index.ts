@@ -1,13 +1,6 @@
 import fetchJson from "../../../../utils/fetch-json";
 import mapToCamelCase from "../../../../utils/map-to-camel-case";
-
-interface Conversation {
-  id: string;
-  title: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { Conversation } from "../../types/conversation.interface";
 
 interface GetConversationsResponse {
   conversations: Conversation[];

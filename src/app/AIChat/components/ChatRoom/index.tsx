@@ -4,13 +4,27 @@ import AnswerBubble from '../AnswerBubble';
 import QuestionBubble from '../QuestionBubble';
 import TodayDivider from '../TodayDivider';
 import InputPrompt from '../InputPrompt';
+import { useParams } from 'react-router-dom';
+import { useGetChatQuery } from '../../api/@query/use-get-chat';
+import { useMemo } from 'react';
+import { UserRole } from '../../types/user-role.enum';
+import KebabMenuIcon from '../../../../assets/icons/kebab-menu-black.svg?react';
 
 const ChatRoom = () => {
+  const params = useParams();
+  const conversationId = params.conversationId ?? ('' as string);
+
   const { answer } = useSendAIMessageStore(
     useShallow((state) => ({
       answer: state.answer,
     }))
   );
+
+  const { data: chat } = useGetChatQuery(conversationId);
+
+  const title = useMemo(() => {
+    return chat?.history[0]?.parts[0]?.text;
+  }, [chat]);
 
   return (
     <div
@@ -18,27 +32,41 @@ const ChatRoom = () => {
       className="flex bg-gray-600 h-full w-full text-white p-4 pt-0 pl-0"
     >
       <div className="flex flex-col w-full relative">
-        <div className="h-[64px] py-5 px-6">
-          <h2 className="text-[20px] font-bold text-white">
-            Warning Messages Samples
+        <div className="h-[64px] py-5 px-6 pr-0 flex justify-between items-center">
+          <h2 className="text-[20px] font-bold text-white capitalize">
+            {title}
           </h2>
+
+          <KebabMenuIcon className="cursor-pointer hover:opacity-80 hover:scale-110 transition-all duration-300" />
         </div>
 
-        <div className="bg-gray-500 py-8 rounded-lg flex justify-center w-full overflow-y-auto">
+        <div className="bg-gray-500 py-8 rounded-lg flex justify-center w-full overflow-y-auto flex-1">
           <div className="flex flex-col gap-12 items-start w-[80%]">
-            <QuestionBubble />
-            <AnswerBubble />
+            {chat?.history.map((message) => {
+              if (message.role === UserRole.USER) {
+                return (
+                  <QuestionBubble
+                    date={message.createdAt}
+                    key={message.id}
+                    message={message.parts[0].text}
+                  />
+                );
+              }
+
+              return (
+                <AnswerBubble
+                  date={message.createdAt}
+                  key={message.id}
+                  answer={message.parts[0].text}
+                />
+              );
+            })}
+
             <TodayDivider />
-            <QuestionBubble />
-            <AnswerBubble />
-            <QuestionBubble />
-            <AnswerBubble />
-            <QuestionBubble />
-            <AnswerBubble />
 
             <p>{answer}</p>
 
-            <div className="p-[100px]" />
+            <div className="p-[40px]" />
           </div>
         </div>
 

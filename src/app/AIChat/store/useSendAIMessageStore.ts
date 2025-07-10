@@ -20,6 +20,12 @@ interface AIStore {
   answer: string;
   setAnswer: (newAnswer: string) => void;
 
+  question: string;
+  setQuestion: (newQuestion: string) => void;
+
+  isLoadingAnswer: boolean;
+  setIsLoadingAnswer: (newIsLoadingAnswer: boolean) => void;
+
   messagesAI: Message[];
   setMessagesAI: (newMessagesAI: Message) => void;
 }
@@ -27,6 +33,12 @@ interface AIStore {
 const useSendAIMessageStore = create<AIStore>((set) => ({
   answer: '',
   setAnswer: (newAnswer) => { set({ answer: newAnswer }); },
+
+  question: '',
+  setQuestion: (newQuestion) => { set({ question: newQuestion }); },
+
+  isLoadingAnswer: false,
+  setIsLoadingAnswer: (newIsLoadingAnswer) => { set({ isLoadingAnswer: newIsLoadingAnswer }); },
 
   messagesAI: [],
   setMessagesAI: (newMessagesAI) => { set((state) => ({ messagesAI: [...state.messagesAI, newMessagesAI]})); },

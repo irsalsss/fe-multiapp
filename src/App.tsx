@@ -1,13 +1,13 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import './styles/global.css';
-import AIChatPage from './app/AIChat';
+import AIChatContainer from './app/AIChat/containers/AIChatContainer';
 import { ClerkProvider, SignIn } from '@clerk/clerk-react';
 import UnauthenticatedLayout from './components/layouts/UnauthenticatedLayout';
 import AuthenticatedLayout from './components/layouts/AuthenticatedLayout';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ROUTE_AI_CHAT, ROUTE_SIGN_IN } from './const/routes';
 import ChatRoom from './app/AIChat/components/ChatRoom';
-import EmptyChatRoom from './app/AIChat/components/EmptyChatRoom';
+import AINewChatContainer from './app/AIChat/containers/AINewChatContainer';
 
 const PUBLISHABLE_KEY =
   (import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string) || '';
@@ -32,8 +32,8 @@ const App = () => {
         <Routes>
           {/* Authenticated Routes */}
           <Route element={<AuthenticatedLayout />}>
-            <Route path={ROUTE_AI_CHAT} element={<AIChatPage />}>
-              <Route path="" element={<EmptyChatRoom />} />
+            <Route path={ROUTE_AI_CHAT} element={<AIChatContainer />}>
+              <Route path="" element={<AINewChatContainer />} />
               <Route path=":conversationId" element={<ChatRoom />} />
             </Route>
 

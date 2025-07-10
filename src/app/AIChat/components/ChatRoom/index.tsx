@@ -1,5 +1,3 @@
-import { useShallow } from 'zustand/shallow';
-import useSendAIMessageStore from '../../store/useSendAIMessageStore';
 import AnswerBubble from '../AnswerBubble';
 import QuestionBubble from '../QuestionBubble';
 import TodayDivider from '../TodayDivider';
@@ -9,17 +7,10 @@ import { useGetChatQuery } from '../../api/@query/use-get-chat';
 import { useMemo } from 'react';
 import { UserRole } from '../../types/user-role.enum';
 import DropdownChat from '../DropdownChat';
-import MarkdownAnswer from '../MarkdownAnswer';
 
 const ChatRoom = () => {
   const params = useParams();
   const conversationId = params.conversationId ?? ('' as string);
-
-  const { answer } = useSendAIMessageStore(
-    useShallow((state) => ({
-      answer: state.answer,
-    }))
-  );
 
   const { data: chat } = useGetChatQuery(conversationId);
 
@@ -29,7 +20,7 @@ const ChatRoom = () => {
 
   return (
     <div
-      id="ai-chatbot"
+      id="ai-chat-room"
       className="flex bg-gray-600 h-full w-full text-white p-4 pt-0 pl-0"
     >
       <div className="flex flex-col w-full relative">
@@ -63,9 +54,8 @@ const ChatRoom = () => {
               );
             })}
 
+            {/* TODO: fix here */}
             <TodayDivider />
-
-            <MarkdownAnswer answer={answer} />
 
             <div className="p-[40px]" />
           </div>

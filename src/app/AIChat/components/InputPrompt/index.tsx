@@ -6,9 +6,22 @@ import useGoogleAI from '../../hooks/useGoogleAI';
 import { useSendChat } from '../../api/@mutation/use-send-chat';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY_CONVERSATIONS } from '../../api/@query/use-get-conversations';
+import { useNavigate } from 'react-router-dom';
+import { useShallow } from 'zustand/react/shallow';
+import useSendAIMessageStore from '../../store/useSendAIMessageStore';
 
 const InputPrompt = () => {
   const [inputValue, setInputValue] = useState('');
+
+  const navigate = useNavigate();
+
+  const { setQuestion, setAnswer, setIsLoadingAnswer } = useSendAIMessageStore(
+    useShallow((state) => ({
+      setQuestion: state.setQuestion,
+      setAnswer: state.setAnswer,
+      setIsLoadingAnswer: state.setIsLoadingAnswer,
+    }))
+  );
 
   const { mutateAsync: sendChat } = useSendChat();
   const { sendGoogleAIMessage } = useGoogleAI();
@@ -19,13 +32,27 @@ const InputPrompt = () => {
   };
 
   const handleSendMessage = async () => {
+    setQuestion(inputValue);
+
     await sendGoogleAIMessage({
       message: inputValue,
       onSuccess: async (title, description) => {
-        await sendChat({ title, description });
+        await sendChat(
+          { title, description },
+          {
+            onSuccess: (id: string) => {
+              setQuestion('');
+              setAnswer('');
+              setIsLoadingAnswer(false);
+              void navigate(`/ai-chat/${id}`);
+            },
+          }
+        );
+
         await queryClient.invalidateQueries({
           queryKey: [QUERY_KEY_CONVERSATIONS],
         });
+
         setInputValue('');
       },
     });

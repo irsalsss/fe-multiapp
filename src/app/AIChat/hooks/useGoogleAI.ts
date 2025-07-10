@@ -8,11 +8,12 @@ interface SendGoogleAIMessageProps {
 }
 
 const useGoogleAI = () => {
-  const { setMessagesAI, setAnswer } = useSendAIMessageStore(
+  const { setMessagesAI, setAnswer, setIsLoadingAnswer } = useSendAIMessageStore(
     useShallow((state) => ({
       messagesAI: state.messagesAI,
       setMessagesAI: state.setMessagesAI,
       setAnswer: state.setAnswer,
+      setIsLoadingAnswer: state.setIsLoadingAnswer,
     })),
   )
 
@@ -21,6 +22,8 @@ const useGoogleAI = () => {
   const googleAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
   const sendGoogleAIMessage = async ({ message, onSuccess }: SendGoogleAIMessageProps) => {
+    setIsLoadingAnswer(true);
+
     const startTime = Date.now();
     const streamChunks: StreamChunk[] = [];
     let chunkIndex = 0;

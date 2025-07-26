@@ -9,6 +9,7 @@ import { QUERY_KEY_CONVERSATIONS } from '../../api/@query/use-get-conversations'
 import { useNavigate } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
 import useSendAIMessageStore from '../../store/useSendAIMessageStore';
+import { ROUTE_AI_CHAT } from '../../../../const/routes';
 
 const InputPrompt = () => {
   const [inputValue, setInputValue] = useState('');
@@ -44,7 +45,7 @@ const InputPrompt = () => {
               setQuestion('');
               setAnswer('');
               setIsLoadingAnswer(false);
-              void navigate(`/ai-chat/${id}`);
+              void navigate(`${ROUTE_AI_CHAT}/${id}`);
             },
           }
         );

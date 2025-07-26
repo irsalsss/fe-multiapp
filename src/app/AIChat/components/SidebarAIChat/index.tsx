@@ -7,6 +7,7 @@ import useSidebarStore, { ActiveSidebar } from '../../store/useSidebarStore';
 import Conversations from '../Conversations';
 import { useGetConversationsQuery } from '../../api/@query/use-get-conversations';
 import { Link } from 'react-router-dom';
+import { ROUTE_AI_CHAT } from '../../../../const/routes';
 
 const tabChatHistoryList = [
   {
@@ -45,7 +46,7 @@ const SidebarAIChat = () => {
           <h2 className="text-[20px] font-bold text-white">My Chats</h2>
 
           <div className="flex items-center gap-[10px]">
-            <Link to="/ai-chat">
+            <Link to={ROUTE_AI_CHAT}>
               <NewChatIcon className="cursor-pointer hover:opacity-80 hover:scale-110 transition-all duration-300" />
             </Link>
           </div>

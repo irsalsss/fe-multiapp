@@ -5,9 +5,21 @@ import ButtonIcon from '../ButtonIcon';
 import { ButtonSize, ButtonType } from '../ButtonIcon/types';
 import { useState } from 'react';
 import { useClickOutside } from '@mantine/hooks';
+import { useDeleteConversation } from '../../api/@mutation/use-delete-conversation';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ROUTE_AI_CHAT } from '../../../../const/routes';
+import { QUERY_KEY_CONVERSATIONS } from '../../api/@query/use-get-conversations';
+import { useQueryClient } from '@tanstack/react-query';
 
 const DropdownChat = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { conversationId } = useParams();
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: deleteConversation } = useDeleteConversation();
 
   const handleOpenDropdown = () => {
     setIsOpen(!isOpen);
@@ -21,8 +33,18 @@ const DropdownChat = () => {
     console.log('save chat');
   };
 
-  const handleDeleteChat = () => {
-    console.log('delete chat');
+  const handleDeleteChat = async () => {
+    if (conversationId) {
+      await deleteConversation(conversationId, {
+        onSuccess: () => {
+          void navigate(ROUTE_AI_CHAT);
+          void queryClient.invalidateQueries({
+            queryKey: [QUERY_KEY_CONVERSATIONS],
+          });
+          setIsOpen(false);
+        },
+      });
+    }
   };
 
   const items = [

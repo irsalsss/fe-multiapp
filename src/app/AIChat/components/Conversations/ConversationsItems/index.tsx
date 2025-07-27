@@ -25,7 +25,7 @@ const ConversationsItems = ({
         className={twMerge(
           'group py-[10px] px-6 flex flex-col gap-[6px] relative cursor-pointer',
           isActive && 'bg-gray-700 rounded-[8px] mx-[-8px] px-8',
-          'hover:bg-gray-700 hover:rounded-[8px] hover:mx-[-8px] hover:px-8 transition-all duration-500'
+          'hover:bg-gray-700 hover:rounded-[8px] hover:mx-[-8px] hover:px-8'
         )}
       >
         <ChatGPTIcon

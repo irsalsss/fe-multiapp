@@ -4,16 +4,14 @@ import useSendAIMessageStore, { type StreamChunk } from '../store/useSendAIMessa
 
 interface SendGoogleAIMessageProps {
   message: string;
-  onSuccess: (title: string, description: string) => Promise<void> | void;
+  onSuccess: (description: string) => Promise<void> | void;
 }
 
 const useGoogleAI = () => {
-  const { setMessagesAI, setAnswer, setIsLoadingAnswer } = useSendAIMessageStore(
+  const { setMessagesAI, setAnswer } = useSendAIMessageStore(
     useShallow((state) => ({
-      messagesAI: state.messagesAI,
       setMessagesAI: state.setMessagesAI,
       setAnswer: state.setAnswer,
-      setIsLoadingAnswer: state.setIsLoadingAnswer,
     })),
   )
 
@@ -22,7 +20,9 @@ const useGoogleAI = () => {
   const googleAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
   const sendGoogleAIMessage = async ({ message, onSuccess }: SendGoogleAIMessageProps) => {
-    setIsLoadingAnswer(true);
+    if (!message) {
+      throw new Error('Message is required');
+    }
 
     const startTime = Date.now();
     const streamChunks: StreamChunk[] = [];
@@ -32,7 +32,7 @@ const useGoogleAI = () => {
       model: 'gemini-2.0-flash',
       contents: message,
       config: {
-        maxOutputTokens: 200,
+        maxOutputTokens: 1000,
       }
     });
 
@@ -61,7 +61,7 @@ const useGoogleAI = () => {
           streamChunks,
         }
       });
-      await onSuccess(message, answer);
+      await onSuccess(answer);
     } catch (error) {
       console.error('Error generating content:', error);
     }

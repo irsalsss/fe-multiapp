@@ -1,5 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 import { getConversations } from "../../get-conversations";
+import type { Conversation } from "../../../types/conversation.interface";
+
+interface GetConversationsData {
+  conversations: Conversation[];
+  length: number;
+}
 
 export const QUERY_KEY_CONVERSATIONS = "useGetConversationsQuery";
 
@@ -10,3 +16,20 @@ export const useGetConversationsQuery = (enabled = true) => {
     enabled,
   });
 };
+
+export const setConversationsQueryData = (queryClient: QueryClient, conversationId: string, answer: string) => {
+  queryClient.setQueryData([QUERY_KEY_CONVERSATIONS], (oldData: GetConversationsData | undefined) => {
+    if (!oldData?.conversations) {
+      return oldData;
+    }
+
+    const newConversations = oldData.conversations.map((conversation: Conversation) => {
+      if (conversation.id === conversationId) {
+        return { ...conversation, description: answer };
+      }
+      return conversation;
+    });
+
+    return { ...oldData, conversations: newConversations };
+  });
+}

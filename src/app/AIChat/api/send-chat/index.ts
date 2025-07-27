@@ -2,7 +2,7 @@ import fetchJson from "../../../../utils/fetch-json";
 
 export interface SendChatInput {
   title: string;
-  description: string;
+  description?: string;
 }
 
 export const sendChat = async (data: SendChatInput): Promise<string> => {

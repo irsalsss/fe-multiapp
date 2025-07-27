@@ -1,12 +1,20 @@
 import { Outlet } from 'react-router-dom';
 import SidebarAIChat from '../../components/SidebarAIChat';
+import InputPrompt from '../../components/InputPrompt';
 
 const AIChatContainer: React.FC = () => {
   return (
     <div className="flex h-screen">
       <SidebarAIChat />
 
-      <Outlet />
+      <div id="ai-chat-container" className='relative flex bg-gray-600 h-full w-full text-white p-4 pt-0 pl-0'>
+        <Outlet />
+
+        <div className="absolute bottom-[16px] w-[80%] left-1/2 -translate-x-1/2 -translate-y-[16px] shadow-custom z-10">
+          <InputPrompt />
+        </div>
+      </div>
+
     </div>
   );
 };

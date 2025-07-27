@@ -1,30 +1,39 @@
 import Send from '../../../../assets/icons/send.svg?react';
 import ButtonIcon from '../ButtonIcon';
 import { ButtonSize, ButtonType } from '../ButtonIcon/types';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useGoogleAI from '../../hooks/useGoogleAI';
 import { useSendChat } from '../../api/@mutation/use-send-chat';
 import { useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEY_CONVERSATIONS } from '../../api/@query/use-get-conversations';
-import { useNavigate } from 'react-router-dom';
+import { QUERY_KEY_CONVERSATIONS, setConversationsQueryData } from '../../api/@query/use-get-conversations';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
 import useSendAIMessageStore from '../../store/useSendAIMessageStore';
 import { ROUTE_AI_CHAT } from '../../../../const/routes';
+import { useUpdateChat } from '../../api/@mutation/use-update-chat';
+import type { ChatMessagePart } from '../../types/chat.interface';
+import { setUpdateChatQueryData } from '../../api/@query/use-get-chat';
 
 const InputPrompt = () => {
   const [inputValue, setInputValue] = useState('');
 
+  const params = useParams();
   const navigate = useNavigate();
 
-  const { setQuestion, setAnswer, setIsLoadingAnswer } = useSendAIMessageStore(
+  const conversationId = params.conversationId ?? '';
+
+  const { isLoadingAnswer, question, setQuestion, setAnswer, setIsLoadingAnswer } = useSendAIMessageStore(
     useShallow((state) => ({
+      isLoadingAnswer: state.isLoadingAnswer,
+      question: state.question,
       setQuestion: state.setQuestion,
       setAnswer: state.setAnswer,
       setIsLoadingAnswer: state.setIsLoadingAnswer,
     }))
   );
 
-  const { mutateAsync: sendChat } = useSendChat();
+  const { mutateAsync: initiateChat } = useSendChat();
+  const { mutateAsync: updateChat } = useUpdateChat();
   const { sendGoogleAIMessage } = useGoogleAI();
   const queryClient = useQueryClient();
 
@@ -32,38 +41,66 @@ const InputPrompt = () => {
     setInputValue(e.target.value);
   };
 
-  const handleSendMessage = async () => {
-    setQuestion(inputValue);
-
+  const handleSendMessageAI = useCallback(async () => {
     await sendGoogleAIMessage({
-      message: inputValue,
-      onSuccess: async (title, description) => {
-        await sendChat(
-          { title, description },
+      message: question,
+      onSuccess: async (answer) => {
+
+        await updateChat(
+          { id: conversationId, answer },
           {
-            onSuccess: (id: string) => {
+            onSuccess: (lastChat: ChatMessagePart) => {
               setQuestion('');
               setAnswer('');
               setIsLoadingAnswer(false);
-              void navigate(`${ROUTE_AI_CHAT}/${id}`);
+              setConversationsQueryData(queryClient, conversationId, answer);
+              setUpdateChatQueryData(queryClient, conversationId, lastChat);
             },
           }
         );
-
-        await queryClient.invalidateQueries({
-          queryKey: [QUERY_KEY_CONVERSATIONS],
-        });
-
-        setInputValue('');
       },
+    }); 
+  }, [
+    conversationId,
+    question,
+    queryClient,
+    sendGoogleAIMessage,
+    updateChat,
+    setQuestion,
+    setAnswer,
+    setIsLoadingAnswer,
+  ]);
+
+  const handleInitiateChat = async () => {
+    setQuestion(inputValue);
+    setIsLoadingAnswer(true);
+    setInputValue('');
+
+    await initiateChat(
+      { title: inputValue},
+      {
+        onSuccess: (id: string) => {
+          void navigate(`${ROUTE_AI_CHAT}/${id}`);
+        },
+      }
+    );
+
+    await queryClient.invalidateQueries({
+      queryKey: [QUERY_KEY_CONVERSATIONS],
     });
   };
 
   const handlePressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      void handleSendMessage();
+      void handleInitiateChat();
     }
   };
+
+  useEffect(() => {
+    if (conversationId && isLoadingAnswer) {
+      void handleSendMessageAI();
+    }
+  }, [conversationId, isLoadingAnswer]);
 
   return (
     <div className="relative w-full">
@@ -73,7 +110,7 @@ const InputPrompt = () => {
         icon={<Send />}
         className="absolute top-[12px] right-[12px] rounded-lg h-8 w-8"
         onClick={() => {
-          void handleSendMessage();
+          void handleInitiateChat();
         }}
       />
 
@@ -84,6 +121,7 @@ const InputPrompt = () => {
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handlePressEnter}
+        autoFocus
       />
     </div>
   );

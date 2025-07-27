@@ -1,4 +1,4 @@
-import type { UserRole } from "./user-role.enum";
+import type { UserRoleEnum } from "./user-role.enum";
 
 export interface ChatMessagePart {
   id: string;
@@ -7,7 +7,7 @@ export interface ChatMessagePart {
 
 export interface ChatMessage {
   id: string;
-  role: UserRole;
+  role: UserRoleEnum;
   createdAt: string;
   parts: ChatMessagePart[];
 }
@@ -15,4 +15,5 @@ export interface ChatMessage {
 export interface Chat {
   id: string;
   history: ChatMessage[];
+  createdAt: string;
 }

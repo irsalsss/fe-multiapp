@@ -7,52 +7,79 @@
 export function formatRelativeDate(date: Date | string | number, timezone?: string): string {
   const targetDate = new Date(date);
   
-  // Default to UTC if no timezone is provided
-  let userTimezone: string = timezone ?? 'UTC';
+  // Default to user's local timezone if no timezone is provided
+  let userTimezone: string;
   try {
     if (!timezone) {
-      userTimezone = 'UTC';
+      // Use the user's local timezone
+      userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     } else {
-      // Validate timezone
+      // Validate the provided timezone
+      userTimezone = timezone;
       Intl.DateTimeFormat(undefined, { timeZone: userTimezone });
     }
   } catch {
-    userTimezone = 'UTC';
+    // Fallback to user's local timezone if the provided timezone is invalid
+    try {
+      userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    } catch {
+      // Ultimate fallback to UTC if everything fails
+      userTimezone = 'UTC';
+    }
   }
   
   // Use mocked time if available (for testing), otherwise use real time
   // In Jest environment, Date.now() will use the mocked time
   const now = new Date(Date.now());
   
-  // Create dates in the user's timezone for comparison
-  let targetDateInTZ: Date;
-  let nowInTZ: Date;
+  // Get date components in the specified timezone
+  let targetYear: number, targetMonth: number, targetDay: number;
+  let nowYear: number, nowMonth: number, nowDay: number;
   
   try {
-    targetDateInTZ = new Date(targetDate.toLocaleString('en-US', { timeZone: userTimezone }));
-    nowInTZ = new Date(now.toLocaleString('en-US', { timeZone: userTimezone }));
+    // Use Intl.DateTimeFormat to get date parts in the target timezone
+    const targetFormatter = new Intl.DateTimeFormat('en-CA', { 
+      timeZone: userTimezone, 
+      year: 'numeric', 
+      month: '2-digit', 
+      day: '2-digit' 
+    });
+    const nowFormatter = new Intl.DateTimeFormat('en-CA', { 
+      timeZone: userTimezone, 
+      year: 'numeric', 
+      month: '2-digit', 
+      day: '2-digit' 
+    });
+    
+    const targetParts = targetFormatter.formatToParts(targetDate);
+    const nowParts = nowFormatter.formatToParts(now);
+    
+    targetYear = parseInt(targetParts.find(p => p.type === 'year')?.value ?? '0');
+    targetMonth = parseInt(targetParts.find(p => p.type === 'month')?.value ?? '0') - 1; // JS months are 0-indexed
+    targetDay = parseInt(targetParts.find(p => p.type === 'day')?.value ?? '0');
+    
+    nowYear = parseInt(nowParts.find(p => p.type === 'year')?.value ?? '0');
+    nowMonth = parseInt(nowParts.find(p => p.type === 'month')?.value ?? '0') - 1; // JS months are 0-indexed
+    nowDay = parseInt(nowParts.find(p => p.type === 'day')?.value ?? '0');
   } catch {
-    // Fallback to UTC if timezone is invalid
-    targetDateInTZ = new Date(targetDate.toLocaleString('en-US', { timeZone: 'UTC' }));
-    nowInTZ = new Date(now.toLocaleString('en-US', { timeZone: 'UTC' }));
+    // Fallback to UTC if timezone operations fail
     userTimezone = 'UTC';
+    targetYear = targetDate.getUTCFullYear();
+    targetMonth = targetDate.getUTCMonth();
+    targetDay = targetDate.getUTCDate();
+    
+    nowYear = now.getUTCFullYear();
+    nowMonth = now.getUTCMonth();
+    nowDay = now.getUTCDate();
   }
   
-  // Reset time to compare just the dates in the user's timezone
-  const targetDateOnly = new Date(
-    targetDateInTZ.getFullYear(), 
-    targetDateInTZ.getMonth(), 
-    targetDateInTZ.getDate()
-  );
-  const todayOnly = new Date(
-    nowInTZ.getFullYear(), 
-    nowInTZ.getMonth(), 
-    nowInTZ.getDate()
-  );
+  // Create date-only objects for comparison (in UTC to avoid timezone issues)
+  const targetDateOnly = new Date(Date.UTC(targetYear, targetMonth, targetDay));
+  const todayOnly = new Date(Date.UTC(nowYear, nowMonth, nowDay));
   
   // Calculate difference in days
   const diffTime = todayOnly.getTime() - targetDateOnly.getTime();
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
   
   // 1. If today, return time (9:34 PM or 10:00 AM) in user's timezone
   if (diffDays === 0) {
@@ -64,15 +91,16 @@ export function formatRelativeDate(date: Date | string | number, timezone?: stri
     });
   }
   
-  // 2. If less than a week, return day name (Thu or Mon) in user's timezone
-  if (diffDays < 7) {
+  // 2. If less than a week ago (but not future dates), return day name (Thu or Mon) in user's timezone
+  if (diffDays > 0 && diffDays < 7) {
     // Use Intl.DateTimeFormat for correct weekday in timezone
     return new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: userTimezone }).format(targetDate);
   }
   
-  // 3. If less than a year, return day and month (10 Oct) in user's timezone
-  const oneYearAgo = new Date(nowInTZ.getFullYear() - 1, nowInTZ.getMonth(), nowInTZ.getDate());
-  if (targetDateInTZ >= oneYearAgo) {
+  // 3. If less than a year (past or future), return day and month (10 Oct) in user's timezone
+  const oneYearAgo = new Date(Date.UTC(nowYear - 1, nowMonth, nowDay));
+  const oneYearFromNow = new Date(Date.UTC(nowYear + 1, nowMonth, nowDay));
+  if (targetDateOnly >= oneYearAgo && targetDateOnly < oneYearFromNow) {
     const day = targetDate.toLocaleDateString('en-US', {
       day: 'numeric',
       timeZone: userTimezone
@@ -111,17 +139,25 @@ export function formatTimeAgo(date: Date | string | number, timezone?: string): 
   const targetDate = new Date(date);
   const now = new Date(Date.now());
   
-  // Default to UTC if no timezone is provided
-  let userTimezone: string = timezone ?? 'UTC';
+  // Default to user's local timezone if no timezone is provided
+  let userTimezone: string;
   try {
     if (!timezone) {
-      userTimezone = 'UTC';
+      // Use the user's local timezone
+      userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     } else {
-      // Validate timezone
+      // Validate the provided timezone
+      userTimezone = timezone;
       Intl.DateTimeFormat(undefined, { timeZone: userTimezone });
     }
   } catch {
-    userTimezone = 'UTC';
+    // Fallback to user's local timezone if the provided timezone is invalid
+    try {
+      userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    } catch {
+      // Ultimate fallback to UTC if everything fails
+      userTimezone = 'UTC';
+    }
   }
   
   // Calculate time difference in milliseconds

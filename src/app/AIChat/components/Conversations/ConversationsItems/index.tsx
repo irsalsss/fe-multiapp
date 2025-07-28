@@ -1,8 +1,8 @@
 import { twMerge } from 'tailwind-merge';
-import { formatRelativeDate } from '../../../utils/date/date';
 import ChatGPTIcon from '../../../../../assets/icons/chat-gpt-white.svg?react';
 import { Link } from 'react-router-dom';
 import { ROUTE_AI_CHAT } from '../../../../../const/routes';
+import { formatRelativeDate } from '../../../utils/date/date';
 
 interface ConversationsItemsProps {
   title: string;

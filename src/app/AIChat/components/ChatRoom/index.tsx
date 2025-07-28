@@ -10,7 +10,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { UserRoleEnum } from '../../types/user-role.enum';
 
 const ChatRoom = () => {
-  const { answer: answerAI, isLoadingAnswer } = useSendAIMessageStore(
+  const { answer: answerAI, isLoadingAnswer, } = useSendAIMessageStore(
     useShallow((state) => ({
       answer: state.answer,
       isLoadingAnswer: state.isLoadingAnswer,

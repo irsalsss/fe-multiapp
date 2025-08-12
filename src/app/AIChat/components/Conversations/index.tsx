@@ -15,7 +15,10 @@ const Conversations = () => {
       return [];
     }
 
-    return conversations.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return conversations.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
   }, [data]);
 
   const isActiveConversation = (id: string) => {

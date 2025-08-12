@@ -33,3 +33,20 @@ export const setConversationsQueryData = (queryClient: QueryClient, conversation
     return { ...oldData, conversations: newConversations };
   });
 }
+
+export const addConversationQueryData = (queryClient: QueryClient, conversationId: string, title: string) => {
+  queryClient.setQueryData([QUERY_KEY_CONVERSATIONS], (oldData: GetConversationsData | undefined) => {
+    if (!oldData?.conversations) {
+      return oldData;
+    }
+
+    const newConversations = [{
+      id: conversationId,
+      title,
+      description: '',
+      createdAt: new Date().toLocaleString(),
+    }, ...oldData.conversations];
+
+    return { ...oldData, conversations: newConversations };
+  });
+}

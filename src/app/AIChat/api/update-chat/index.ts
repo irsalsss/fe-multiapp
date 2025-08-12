@@ -1,5 +1,5 @@
 import fetchJson from "../../../../utils/fetch-json";
-import type { ChatMessagePart } from "../../types/chat.interface";
+import type { ChatMessage } from "../../types/chat.interface";
 import type { UserRoleEnum } from "../../types/user-role.enum";
 
 export interface UpdateChatInput {
@@ -10,10 +10,10 @@ export interface UpdateChatInput {
 
 export interface UpdateChatResponse {
   role: UserRoleEnum
-  parts: ChatMessagePart[]
+  chat: ChatMessage[]
 }
 
-export const updateChat = async (data: UpdateChatInput): Promise<ChatMessagePart> => {
+export const updateChat = async (data: UpdateChatInput): Promise<ChatMessage> => {
   if (!data.id) {
     throw new Error('Conversation ID is required');
   }
@@ -28,7 +28,7 @@ export const updateChat = async (data: UpdateChatInput): Promise<ChatMessagePart
     body.answer = data.answer;
   }
 
-  const response = await fetchJson<ChatMessagePart>(`/api/chats/${data.id}`, {
+  const response = await fetchJson<ChatMessage>(`/api/chats/${data.id}`, {
     method: 'PUT',
     body,
   });

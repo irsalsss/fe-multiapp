@@ -3,6 +3,7 @@ import type { UserRoleEnum } from "./user-role.enum";
 export interface ChatMessagePart {
   id: string;
   text: string;
+  createdAt: string;
 }
 
 export interface ChatMessage {

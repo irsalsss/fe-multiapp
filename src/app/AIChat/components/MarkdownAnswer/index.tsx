@@ -55,8 +55,11 @@ const MarkdownAnswer = ({ answer }: MarkdownAnswerProps) => {
             {children}
           </ol>
         ),
-        li: ({ children }) => (
-          <li className="text-[12px] leading-[16px] font-normal mb-1">
+        li: ({ children, ...props }) => (
+          <li
+            className="text-[12px] leading-[16px] font-normal mb-1"
+            {...props}
+          >
             {children}
           </li>
         ),
@@ -99,27 +102,38 @@ const MarkdownAnswer = ({ answer }: MarkdownAnswerProps) => {
         ),
         em: ({ children }) => <em className="italic">{children}</em>,
         hr: () => <hr className="border-t border-gray-300 my-4" />,
-        table: ({ children }) => (
-          <table className="text-[13px] border-collapse border border-gray-300 mb-4 last:mb-0 w-full rounded-lg overflow-hidden shadow-sm">
+        table: ({ children, ...props }) => (
+          <table
+            className="text-[13px] border-collapse border border-gray-300 mb-4 last:mb-0 w-full rounded-lg overflow-hidden shadow-sm"
+            {...props}
+          >
             {children}
           </table>
         ),
-        thead: ({ children }) => (
-          <thead className="bg-gray-50">{children}</thead>
+        thead: ({ children, ...props }) => (
+          <thead className="bg-gray-50" {...props}>
+            {children}
+          </thead>
         ),
-        tbody: ({ children }) => <tbody>{children}</tbody>,
-        tr: ({ children }) => (
-          <tr className="border-b border-gray-200 transition-colors">
+        tbody: ({ children, ...props }) => <tbody {...props}>{children}</tbody>,
+        tr: ({ children, ...props }) => (
+          <tr className="border-b border-gray-200 transition-colors" {...props}>
             {children}
           </tr>
         ),
-        th: ({ children }) => (
-          <th className="border border-gray-200 px-4 py-3 text-left font-semibold text-gray-700 bg-gray-100">
+        th: ({ children, ...props }) => (
+          <th
+            className="border border-gray-200 px-4 py-3 text-left font-semibold text-gray-700 bg-gray-100"
+            {...props}
+          >
             {children}
           </th>
         ),
-        td: ({ children }) => (
-          <td className="border border-gray-200 px-4 py-3 text-gray-800 leading-relaxed">
+        td: ({ children, ...props }) => (
+          <td
+            className="border border-gray-200 px-4 py-3 text-gray-800 leading-relaxed"
+            {...props}
+          >
             {children}
           </td>
         ),

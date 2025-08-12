@@ -10,14 +10,14 @@ import { useShallow } from 'zustand/react/shallow';
 import { UserRoleEnum } from '../../types/user-role.enum';
 
 const ChatRoom = () => {
-  const { answer: answerAI, isLoadingAnswer, } = useSendAIMessageStore(
+  const { answer: answerAI, isLoadingAnswer } = useSendAIMessageStore(
     useShallow((state) => ({
       answer: state.answer,
       isLoadingAnswer: state.isLoadingAnswer,
     }))
   );
 
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null);
 
   const params = useParams();
   const conversationId = params.conversationId ?? ('' as string);
@@ -39,9 +39,7 @@ const ChatRoom = () => {
   return (
     <div className="flex flex-col w-full relative">
       <div className="h-[64px] py-5 px-6 pr-0 flex justify-between items-center">
-        <h2 className="text-[20px] font-bold text-white capitalize">
-          {title}
-        </h2>
+        <h2 className="text-[20px] font-bold text-white capitalize">{title}</h2>
 
         <DropdownChat />
       </div>
@@ -67,18 +65,24 @@ const ChatRoom = () => {
                 date={message.createdAt}
                 key={message.id}
                 answer={message.parts[0].text}
+                isLoadingAnswer={isLoadingAnswer}
               />
             );
           })}
 
           {isLoadingAnswer && (
-            <AnswerBubble answer={answerAI} date={new Date().toISOString()} />
+            <AnswerBubble
+              key="loading-answer"
+              answer={answerAI}
+              date={new Date().toLocaleString()}
+              isLoadingAnswer={isLoadingAnswer}
+            />
           )}
 
           {/* TODO: fix here */}
-          <TodayDivider />
+          <TodayDivider key="today-divider" />
 
-          <div className="p-[40px]" />
+          <div key="padding-spacer" className="p-[40px]" />
         </div>
       </div>
     </div>

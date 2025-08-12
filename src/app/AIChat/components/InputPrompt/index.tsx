@@ -1,28 +1,39 @@
 import Send from '../../../../assets/icons/send.svg?react';
 import ButtonIcon from '../ButtonIcon';
 import { ButtonSize, ButtonType } from '../ButtonIcon/types';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import useGoogleAI from '../../hooks/useGoogleAI';
 import { useSendChat } from '../../api/@mutation/use-send-chat';
 import { useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEY_CONVERSATIONS, setConversationsQueryData } from '../../api/@query/use-get-conversations';
+import {
+  addConversationQueryData,
+  setConversationsQueryData,
+} from '../../api/@query/use-get-conversations';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
 import useSendAIMessageStore from '../../store/useSendAIMessageStore';
 import { ROUTE_AI_CHAT } from '../../../../const/routes';
 import { useUpdateChat } from '../../api/@mutation/use-update-chat';
-import type { ChatMessagePart } from '../../types/chat.interface';
-import { setUpdateChatQueryData } from '../../api/@query/use-get-chat';
+import type { ChatMessage } from '../../types/chat.interface';
+import { addChatQueryData } from '../../api/@query/use-get-chat';
+import { UserRoleEnum } from '../../types/user-role.enum';
 
 const InputPrompt = () => {
   const [inputValue, setInputValue] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const params = useParams();
   const navigate = useNavigate();
 
   const conversationId = params.conversationId ?? '';
 
-  const { isLoadingAnswer, question, setQuestion, setAnswer, setIsLoadingAnswer } = useSendAIMessageStore(
+  const {
+    isLoadingAnswer,
+    question,
+    setQuestion,
+    setAnswer,
+    setIsLoadingAnswer,
+  } = useSendAIMessageStore(
     useShallow((state) => ({
       isLoadingAnswer: state.isLoadingAnswer,
       question: state.question,
@@ -45,21 +56,22 @@ const InputPrompt = () => {
     await sendGoogleAIMessage({
       message: question,
       onSuccess: async (answer) => {
-
         await updateChat(
           { id: conversationId, answer },
           {
-            onSuccess: (lastChat: ChatMessagePart) => {
+            onSuccess: (lastChat: ChatMessage) => {
               setQuestion('');
               setAnswer('');
               setIsLoadingAnswer(false);
               setConversationsQueryData(queryClient, conversationId, answer);
-              setUpdateChatQueryData(queryClient, conversationId, lastChat);
+              addChatQueryData(queryClient, conversationId, [
+                { ...lastChat, createdAt: new Date().toLocaleString() },
+              ]);
             },
           }
         );
       },
-    }); 
+    });
   }, [
     conversationId,
     question,
@@ -77,17 +89,31 @@ const InputPrompt = () => {
     setInputValue('');
 
     await initiateChat(
-      { title: inputValue},
+      { title: inputValue },
       {
         onSuccess: (id: string) => {
           void navigate(`${ROUTE_AI_CHAT}/${id}`);
+          addConversationQueryData(queryClient, id, inputValue);
+
+          const now = new Date().toLocaleString();
+          const chatMessage: ChatMessage[] = [
+            {
+              id: now,
+              role: UserRoleEnum.USER,
+              parts: [
+                {
+                  id: `parts-${now}`,
+                  text: inputValue,
+                  createdAt: now,
+                },
+              ],
+              createdAt: now,
+            },
+          ];
+          addChatQueryData(queryClient, id, chatMessage);
         },
       }
     );
-
-    await queryClient.invalidateQueries({
-      queryKey: [QUERY_KEY_CONVERSATIONS],
-    });
   };
 
   const handlePressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -102,6 +128,25 @@ const InputPrompt = () => {
     }
   }, [conversationId, isLoadingAnswer]);
 
+  useEffect(() => {
+    const handleGlobalKeyDown = (event: KeyboardEvent) => {
+      if (
+        event.key === '/' &&
+        document.activeElement?.tagName !== 'INPUT' &&
+        document.activeElement?.tagName !== 'TEXTAREA'
+      ) {
+        event.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleGlobalKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleGlobalKeyDown);
+    };
+  }, []);
+
   return (
     <div className="relative w-full">
       <ButtonIcon
@@ -115,7 +160,8 @@ const InputPrompt = () => {
       />
 
       <input
-        placeholder="Ask questions, or type ‘/’ for commands"
+        ref={inputRef}
+        placeholder="Ask questions, or type '/' for commands"
         type="text"
         className="w-full h-[56px] rounded-lg bg-gray-400 border-gray-400 pl-[20px] pr-[56px] py-[20px] placeholder:text-gray-200 placeholder:text-[12px] text-[12px] focus:outline-none focus:border-gray-800 border"
         value={inputValue}

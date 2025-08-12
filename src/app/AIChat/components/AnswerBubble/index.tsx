@@ -1,13 +1,16 @@
 import ChatGPT from '../../../../assets/icons/chat-gpt.svg';
 import { formatTimeAgo } from '../../utils/date/date';
+import ChatSpinner from '../ChatSpinner';
+import { EnumSpinnerType } from '../ChatSpinner/types';
 import MarkdownAnswer from '../MarkdownAnswer';
 
 interface AnswerBubbleProps {
   answer: string;
   date: string;
+  isLoadingAnswer: boolean;
 }
 
-const AnswerBubble = ({ answer, date }: AnswerBubbleProps) => {
+const AnswerBubble = ({ answer, date, isLoadingAnswer }: AnswerBubbleProps) => {
   return (
     <div className="bg-gray-650 px-6 py-3 rounded-lg relative w-full">
       <img
@@ -20,12 +23,13 @@ const AnswerBubble = ({ answer, date }: AnswerBubbleProps) => {
           Response
         </span>
         <span className="text-[8px] leading-[8px] text-gray-200 opacity-60">
-          {/* TODO: fix date bug */}
           {formatTimeAgo(date)}
         </span>
       </div>
 
       <MarkdownAnswer answer={answer} />
+
+      {isLoadingAnswer && <ChatSpinner type={EnumSpinnerType.GRADIENT_PULSE} />}
     </div>
   );
 };

@@ -47,6 +47,7 @@ const ChatRoom = () => {
       <div
         ref={ref}
         className="bg-gray-500 py-8 rounded-lg flex justify-center w-full overflow-y-auto flex-1"
+        id="chat-room-container"
       >
         <div className="flex flex-col gap-12 items-start w-[80%]">
           {chat?.history.map((message) => {
@@ -65,7 +66,7 @@ const ChatRoom = () => {
                 date={message.createdAt}
                 key={message.id}
                 answer={message.parts[0].text}
-                isLoadingAnswer={isLoadingAnswer}
+                isLoadingAnswer={false}
               />
             );
           })}

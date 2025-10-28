@@ -14,18 +14,13 @@ export const useGetChatQuery = (conversationId: string, enabled = true) => {
   });
 };
 
-export const setUpdateAnswerChatQueryData = (queryClient: QueryClient, conversatioId: string, lastChat: ChatMessage) => {
-  queryClient.setQueryData([QUERY_KEY_CHAT, conversatioId], (oldData: GetChatData | undefined) => {
+export const setUpdateAnswerChatQueryData = (queryClient: QueryClient, conversationId: string, lastChat: ChatMessage) => {
+  queryClient.setQueryData([QUERY_KEY_CHAT, conversationId], (oldData: GetChatData | undefined) => {
     if (!oldData?.history) {
       return oldData;
     }
 
-    const newHistory = oldData.history.map((history: ChatMessage) => {
-      if (history.id === lastChat.id) {
-        return { ...history, lastChat };
-      }
-      return history;
-    });
+    const newHistory = [...oldData.history, lastChat];
 
     return { ...oldData, history: newHistory };
   });

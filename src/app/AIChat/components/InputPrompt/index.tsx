@@ -15,8 +15,13 @@ import useSendAIMessageStore from '../../store/useSendAIMessageStore';
 import { ROUTE_AI_CHAT } from '../../../../const/routes';
 import { useUpdateChat } from '../../api/@mutation/use-update-chat';
 import type { ChatMessage } from '../../types/chat.interface';
-import { addChatQueryData } from '../../api/@query/use-get-chat';
+import {
+  addChatQueryData,
+  setUpdateAnswerChatQueryData,
+  useGetChatQuery,
+} from '../../api/@query/use-get-chat';
 import { UserRoleEnum } from '../../types/user-role.enum';
+import { sleep } from '../../../../utils/sleep';
 
 const InputPrompt = () => {
   const [inputValue, setInputValue] = useState('');
@@ -43,18 +48,21 @@ const InputPrompt = () => {
     }))
   );
 
+  const queryClient = useQueryClient();
   const { mutateAsync: initiateChat } = useSendChat();
   const { mutateAsync: updateChat } = useUpdateChat();
   const { sendGoogleAIMessage } = useGoogleAI();
-  const queryClient = useQueryClient();
+  const { data: chatData } = useGetChatQuery(conversationId, false);
+
+  const isChatAlreadyInitiated = (chatData?.history.length ?? 0) > 1;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  const handleSendMessageAI = useCallback(async () => {
+  const handleSendMessageAI = useCallback(async (customQuestion?: string) => {
     await sendGoogleAIMessage({
-      message: question,
+      message: question || (customQuestion ?? ''),
       onSuccess: async (answer) => {
         await updateChat(
           { id: conversationId, answer },
@@ -87,6 +95,30 @@ const InputPrompt = () => {
     setQuestion(inputValue);
     setIsLoadingAnswer(true);
     setInputValue('');
+
+    if (isChatAlreadyInitiated) {
+      const chatRoomContainer = document.getElementById('chat-room-container');
+      if (chatRoomContainer) {
+        chatRoomContainer.scrollTo({ top: chatRoomContainer.scrollHeight, behavior: 'smooth' });
+      }
+
+      await updateChat(
+        { id: conversationId, question: inputValue },
+        {
+          onSuccess: (lastChat: ChatMessage) => {
+            setUpdateAnswerChatQueryData(queryClient, conversationId, {
+              ...lastChat, createdAt: new Date().toLocaleString()
+            });
+          },
+        }
+      );
+
+      await sleep(2000);
+
+      await handleSendMessageAI(inputValue);
+
+      return;
+    }
 
     await initiateChat(
       { title: inputValue },
@@ -123,10 +155,10 @@ const InputPrompt = () => {
   };
 
   useEffect(() => {
-    if (conversationId && isLoadingAnswer) {
+    if (conversationId && isLoadingAnswer && !isChatAlreadyInitiated) {
       void handleSendMessageAI();
     }
-  }, [conversationId, isLoadingAnswer]);
+  }, [conversationId, isLoadingAnswer, isChatAlreadyInitiated]);
 
   useEffect(() => {
     const handleGlobalKeyDown = (event: KeyboardEvent) => {
@@ -161,6 +193,7 @@ const InputPrompt = () => {
 
       <input
         ref={inputRef}
+        name="input-prompt"
         placeholder="Ask questions, or type '/' for commands"
         type="text"
         className="w-full h-[56px] rounded-lg bg-gray-400 border-gray-400 pl-[20px] pr-[56px] py-[20px] placeholder:text-gray-200 placeholder:text-[12px] text-[12px] focus:outline-none focus:border-gray-800 border"

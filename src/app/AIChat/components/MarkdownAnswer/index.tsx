@@ -79,7 +79,7 @@ const MarkdownAnswer = ({ answer }: MarkdownAnswerProps) => {
             <code
               className={`${
                 isInline
-                  ? 'text-[11px] bg-gray-100 px-1 py-0.5 rounded'
+                  ? 'text-[11px] bg-gray-500 px-1 py-0.5 rounded'
                   : 'block text-[11px] bg-gray-100 p-2 rounded mb-4 last:mb-0 overflow-x-auto'
               } font-mono`}
             >
@@ -102,36 +102,56 @@ const MarkdownAnswer = ({ answer }: MarkdownAnswerProps) => {
         ),
         em: ({ children }) => <em className="italic">{children}</em>,
         hr: () => <hr className="border-t border-gray-300 my-4" />,
-        table: ({ children, ...props }) => (
-          <table
-            className="text-[13px] border-collapse border border-gray-300 mb-4 last:mb-0 w-full rounded-lg overflow-hidden shadow-sm"
-            {...props}
-          >
-            {children}
-          </table>
-        ),
-        thead: ({ children, ...props }) => (
-          <thead className="bg-gray-50" {...props}>
+        table: ({ children, node, ...props }) => {
+          const caption = node?.data?.hProperties?.['data-caption'];
+
+          return (
+            <div className="mb-4 last:mb-0">
+              {caption && (
+                <p className="text-[12px] leading-[16px] font-semibold text-center mb-1 text-gray-200">
+                  {caption}
+                </p>
+              )}
+              <table
+                className="text-[13px] border-collapse border border-gray-500 w-full rounded-lg overflow-hidden shadow-sm bg-gray-650"
+                {...props}
+              >
+                {children}
+              </table>
+            </div>
+          );
+        },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        thead: ({ children, node, ...props }) => (
+          <thead className="bg-gray-700" {...props}>
             {children}
           </thead>
         ),
-        tbody: ({ children, ...props }) => <tbody {...props}>{children}</tbody>,
-        tr: ({ children, ...props }) => (
-          <tr className="border-b border-gray-200 transition-colors" {...props}>
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        tbody: ({ children, node, ...props }) => (
+          <tbody className="bg-gray-650" {...props}>
+            {children}
+          </tbody>
+        ),
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        tr: ({ children, node, ...props }) => (
+          <tr className="border-b border-gray-500 transition-colors hover:bg-gray-600" {...props}>
             {children}
           </tr>
         ),
-        th: ({ children, ...props }) => (
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        th: ({ children, node, ...props }) => (
           <th
-            className="border border-gray-200 px-4 py-3 text-left font-semibold text-gray-700 bg-gray-100"
+            className="border border-gray-500 px-4 py-3 text-left font-semibold text-gray-200 bg-gray-700"
             {...props}
           >
             {children}
           </th>
         ),
-        td: ({ children, ...props }) => (
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        td: ({ children, node, ...props }) => (
           <td
-            className="border border-gray-200 px-4 py-3 text-gray-800 leading-relaxed"
+            className="border border-gray-500 px-4 py-3 text-gray-200 leading-relaxed bg-gray-400"
             {...props}
           >
             {children}

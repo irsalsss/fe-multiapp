@@ -60,36 +60,49 @@ const InputPrompt = () => {
     setInputValue(e.target.value);
   };
 
-  const handleSendMessageAI = useCallback(async (customQuestion?: string) => {
-    await sendGoogleAIMessage({
-      message: question || (customQuestion ?? ''),
-      onSuccess: async (answer) => {
-        await updateChat(
-          { id: conversationId, answer },
-          {
-            onSuccess: (lastChat: ChatMessage) => {
-              setQuestion('');
-              setAnswer('');
-              setIsLoadingAnswer(false);
-              setConversationsQueryData(queryClient, conversationId, answer);
-              addChatQueryData(queryClient, conversationId, [
-                { ...lastChat, createdAt: new Date().toLocaleString() },
-              ]);
-            },
-          }
-        );
-      },
-    });
-  }, [
-    conversationId,
-    question,
-    queryClient,
-    sendGoogleAIMessage,
-    updateChat,
-    setQuestion,
-    setAnswer,
-    setIsLoadingAnswer,
-  ]);
+  const handleScrollDown = useCallback(() => {
+    const chatRoomContainer = document.getElementById('chat-room-container');
+    if (chatRoomContainer) {
+      chatRoomContainer.scrollTo({
+        top: chatRoomContainer.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, []);
+
+  const handleSendMessageAI = useCallback(
+    async (customQuestion?: string) => {
+      await sendGoogleAIMessage({
+        message: question || (customQuestion ?? ''),
+        onSuccess: async (answer) => {
+          await updateChat(
+            { id: conversationId, answer },
+            {
+              onSuccess: (lastChat: ChatMessage) => {
+                setQuestion('');
+                setAnswer('');
+                setIsLoadingAnswer(false);
+                setConversationsQueryData(queryClient, conversationId, answer);
+                addChatQueryData(queryClient, conversationId, [
+                  { ...lastChat, createdAt: new Date().toLocaleString() },
+                ]);
+              },
+            }
+          );
+        },
+      });
+    },
+    [
+      conversationId,
+      question,
+      queryClient,
+      sendGoogleAIMessage,
+      updateChat,
+      setQuestion,
+      setAnswer,
+      setIsLoadingAnswer,
+    ]
+  );
 
   const handleInitiateChat = async () => {
     setQuestion(inputValue);
@@ -97,17 +110,15 @@ const InputPrompt = () => {
     setInputValue('');
 
     if (isChatAlreadyInitiated) {
-      const chatRoomContainer = document.getElementById('chat-room-container');
-      if (chatRoomContainer) {
-        chatRoomContainer.scrollTo({ top: chatRoomContainer.scrollHeight, behavior: 'smooth' });
-      }
+      handleScrollDown();
 
       await updateChat(
         { id: conversationId, question: inputValue },
         {
           onSuccess: (lastChat: ChatMessage) => {
             setUpdateAnswerChatQueryData(queryClient, conversationId, {
-              ...lastChat, createdAt: new Date().toLocaleString()
+              ...lastChat,
+              createdAt: new Date().toLocaleString(),
             });
           },
         }
@@ -158,7 +169,12 @@ const InputPrompt = () => {
     if (conversationId && isLoadingAnswer && !isChatAlreadyInitiated) {
       void handleSendMessageAI();
     }
-  }, [conversationId, isLoadingAnswer, isChatAlreadyInitiated]);
+  }, [
+    conversationId,
+    isLoadingAnswer,
+    isChatAlreadyInitiated,
+    handleSendMessageAI,
+  ]);
 
   useEffect(() => {
     const handleGlobalKeyDown = (event: KeyboardEvent) => {
@@ -178,6 +194,31 @@ const InputPrompt = () => {
       document.removeEventListener('keydown', handleGlobalKeyDown);
     };
   }, []);
+
+  useEffect(() => {
+    const chatRoomContainer = document.getElementById('chat-room-container');
+
+    if (!chatRoomContainer || !isLoadingAnswer) {
+      return;
+    }
+
+    const scrollInterval = setInterval(() => {
+      const scrollHeight = chatRoomContainer.scrollHeight;
+      const scrollTop = chatRoomContainer.scrollTop;
+      const offsetHeight = chatRoomContainer.offsetHeight;
+
+      const isAtBottom =
+        Math.abs(scrollHeight - scrollTop - offsetHeight) < 400; // 400px tolerance
+
+      if (isAtBottom) {
+        handleScrollDown();
+      }
+    }, 200);
+
+    return () => {
+      clearInterval(scrollInterval);
+    };
+  }, [isLoadingAnswer, handleScrollDown]);
 
   return (
     <div className="relative w-full">

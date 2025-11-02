@@ -79,16 +79,16 @@ const MarkdownAnswer = ({ answer }: MarkdownAnswerProps) => {
             <code
               className={`${
                 isInline
-                  ? 'text-[11px] bg-gray-500 px-1 py-0.5 rounded'
-                  : 'block text-[11px] bg-gray-100 p-2 rounded mb-4 last:mb-0 overflow-x-auto'
-              } font-mono`}
+                  ? 'text-[12px] bg-gray-200 text-gray-400 px-2 py-1 rounded-md border'
+                  : 'block text-[12px] bg-gray-900 text-gray-100 p-4 rounded-lg mb-4 last:mb-0 overflow-x-auto border border-gray-700'
+              } font-mono leading-relaxed`}
             >
               {children}
             </code>
           );
         },
         pre: ({ children }) => (
-          <pre className="text-[11px] bg-gray-100 p-2 rounded mb-4 last:mb-0 overflow-x-auto font-mono">
+          <pre className="text-sm bg-gray-900 text-gray-100 p-4 rounded-lg mb-4 last:mb-0 overflow-x-auto font-mono leading-relaxed border border-gray-700 shadow-lg">
             {children}
           </pre>
         ),
@@ -135,7 +135,10 @@ const MarkdownAnswer = ({ answer }: MarkdownAnswerProps) => {
         ),
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tr: ({ children, node, ...props }) => (
-          <tr className="border-b border-gray-500 transition-colors hover:bg-gray-600" {...props}>
+          <tr
+            className="border-b border-gray-500 transition-colors hover:bg-gray-600"
+            {...props}
+          >
             {children}
           </tr>
         ),

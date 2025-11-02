@@ -1,6 +1,5 @@
 import AnswerBubble from '../AnswerBubble';
 import QuestionBubble from '../QuestionBubble';
-import TodayDivider from '../TodayDivider';
 import { useParams } from 'react-router-dom';
 import { useGetChatQuery } from '../../api/@query/use-get-chat';
 import { useEffect, useMemo, useRef } from 'react';
@@ -81,7 +80,7 @@ const ChatRoom = () => {
           )}
 
           {/* TODO: fix here */}
-          <TodayDivider key="today-divider" />
+          {/* <TodayDivider key="today-divider" /> */}
 
           <div key="padding-spacer" className="p-[40px]" />
         </div>

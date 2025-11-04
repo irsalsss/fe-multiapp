@@ -65,26 +65,31 @@ const InputPrompt = () => {
     if (chatRoomContainer) {
       chatRoomContainer.scrollTo({
         top: chatRoomContainer.scrollHeight,
-        behavior: 'smooth',
       });
     }
   }, []);
 
   const handleSendMessageAI = useCallback(
-    async (customQuestion?: string) => {
+    async (customQuestion: string, customId?: string) => {
+      const id = conversationId || (customId ?? '');
       await sendGoogleAIMessage({
-        message: question || (customQuestion ?? ''),
+        message: question || customQuestion,
         onSuccess: async (answer) => {
           await updateChat(
-            { id: conversationId, answer },
+            { id, answer },
             {
               onSuccess: (lastChat: ChatMessage) => {
+                const now = new Date().toLocaleString();
                 setQuestion('');
                 setAnswer('');
                 setIsLoadingAnswer(false);
-                setConversationsQueryData(queryClient, conversationId, answer);
-                addChatQueryData(queryClient, conversationId, [
-                  { ...lastChat, createdAt: new Date().toLocaleString() },
+                setConversationsQueryData(queryClient, id, answer);
+                addChatQueryData(queryClient, id, [
+                  {
+                    ...lastChat,
+                    id: now,
+                    createdAt: new Date().toLocaleString(),
+                  },
                 ]);
               },
             }
@@ -105,26 +110,27 @@ const InputPrompt = () => {
   );
 
   const handleInitiateChat = async () => {
+    handleScrollDown();
     setQuestion(inputValue);
     setIsLoadingAnswer(true);
     setInputValue('');
 
     if (isChatAlreadyInitiated) {
-      handleScrollDown();
-
       await updateChat(
         { id: conversationId, question: inputValue },
         {
           onSuccess: (lastChat: ChatMessage) => {
+            const now = new Date().toLocaleString();
             setUpdateAnswerChatQueryData(queryClient, conversationId, {
               ...lastChat,
-              createdAt: new Date().toLocaleString(),
+              id: now,
+              createdAt: now,
             });
           },
         }
       );
 
-      await sleep(2000);
+      await sleep(1000);
 
       await handleSendMessageAI(inputValue);
 
@@ -154,6 +160,7 @@ const InputPrompt = () => {
             },
           ];
           addChatQueryData(queryClient, id, chatMessage);
+          void handleSendMessageAI(inputValue, id);
         },
       }
     );
@@ -164,17 +171,6 @@ const InputPrompt = () => {
       void handleInitiateChat();
     }
   };
-
-  useEffect(() => {
-    if (conversationId && isLoadingAnswer && !isChatAlreadyInitiated) {
-      void handleSendMessageAI();
-    }
-  }, [
-    conversationId,
-    isLoadingAnswer,
-    isChatAlreadyInitiated,
-    handleSendMessageAI,
-  ]);
 
   useEffect(() => {
     const handleGlobalKeyDown = (event: KeyboardEvent) => {
@@ -213,12 +209,12 @@ const InputPrompt = () => {
       if (isAtBottom) {
         handleScrollDown();
       }
-    }, 200);
+    }, 100);
 
     return () => {
       clearInterval(scrollInterval);
     };
-  }, [isLoadingAnswer, handleScrollDown]);
+  }, [isLoadingAnswer]);
 
   return (
     <div className="relative w-full">

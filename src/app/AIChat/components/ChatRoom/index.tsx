@@ -7,6 +7,8 @@ import DropdownChat from '../DropdownChat';
 import useSendAIMessageStore from '../../store/useSendAIMessageStore';
 import { useShallow } from 'zustand/react/shallow';
 import { UserRoleEnum } from '../../types/user-role.enum';
+import { EnumSpinnerType } from '../ChatSpinner/types';
+import ChatSpinner from '../ChatSpinner';
 
 const ChatRoom = () => {
   const { answer: answerAI, isLoadingAnswer } = useSendAIMessageStore(
@@ -48,6 +50,9 @@ const ChatRoom = () => {
         className="bg-gray-500 py-8 rounded-lg flex justify-center w-full overflow-y-auto flex-1"
         id="chat-room-container"
       >
+        {/* TODO: saved & unsaved message */}
+        {/* TODO: scroll the latest question to the top */}
+        {/* TODO: response answer loading appear first than question bubble */}
         <div className="flex flex-col gap-12 items-start w-[80%]">
           {chat?.history.map((message) => {
             if (message.role === UserRoleEnum.USER) {
@@ -65,18 +70,20 @@ const ChatRoom = () => {
                 date={message.createdAt}
                 key={message.id}
                 answer={message.parts[0].text}
-                isLoadingAnswer={false}
               />
             );
           })}
 
-          {isLoadingAnswer && (
+          {!!answerAI && (
             <AnswerBubble
               key="loading-answer"
               answer={answerAI}
               date={new Date().toLocaleString()}
-              isLoadingAnswer={isLoadingAnswer}
             />
+          )}
+
+          {isLoadingAnswer && (
+            <ChatSpinner type={EnumSpinnerType.GRADIENT_PULSE} />
           )}
 
           {/* TODO: fix here */}

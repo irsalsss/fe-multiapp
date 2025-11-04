@@ -20,7 +20,7 @@ const BeautySpinner = ({ type }: BeautySpinnerProps) => {
     switch (type) {
       case EnumSpinnerType.GRADIENT_PULSE:
         return (
-          <div className="relative">
+          <div className="relative top-[-20px]">
             <div className="w-4 h-4 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 animate-pulse"></div>
             <div className="absolute inset-0 w-4 h-4 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 animate-ping opacity-75"></div>
           </div>

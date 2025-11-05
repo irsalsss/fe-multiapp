@@ -1,7 +1,7 @@
 import Send from '../../../../assets/icons/send.svg?react';
 import ButtonIcon from '../ButtonIcon';
 import { ButtonSize, ButtonType } from '../ButtonIcon/types';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useGoogleAI from '../../hooks/useGoogleAI';
 import { useSendChat } from '../../api/@mutation/use-send-chat';
 import { useQueryClient } from '@tanstack/react-query';
@@ -32,21 +32,15 @@ const InputPrompt = () => {
 
   const conversationId = params.conversationId ?? '';
 
-  const {
-    isLoadingAnswer,
-    question,
-    setQuestion,
-    setAnswer,
-    setIsLoadingAnswer,
-  } = useSendAIMessageStore(
-    useShallow((state) => ({
-      isLoadingAnswer: state.isLoadingAnswer,
-      question: state.question,
-      setQuestion: state.setQuestion,
-      setAnswer: state.setAnswer,
-      setIsLoadingAnswer: state.setIsLoadingAnswer,
-    }))
-  );
+  const { question, setQuestion, setAnswer, setIsLoadingAnswer } =
+    useSendAIMessageStore(
+      useShallow((state) => ({
+        question: state.question,
+        setQuestion: state.setQuestion,
+        setAnswer: state.setAnswer,
+        setIsLoadingAnswer: state.setIsLoadingAnswer,
+      }))
+    );
 
   const queryClient = useQueryClient();
   const { mutateAsync: initiateChat } = useSendChat();
@@ -54,20 +48,33 @@ const InputPrompt = () => {
   const { sendGoogleAIMessage } = useGoogleAI();
   const { data: chatData } = useGetChatQuery(conversationId, false);
 
-  const isChatAlreadyInitiated = (chatData?.history.length ?? 0) > 1;
+  const chatHistory = useMemo(() => {
+    return chatData?.history ?? [];
+  }, [chatData?.history]);
+  const chatHistoryLength = chatHistory.length;
+
+  const isChatAlreadyInitiated = chatHistoryLength > 1;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  const handleScrollDown = useCallback(() => {
+  const handleToLastQuestion = () => {
     const chatRoomContainer = document.getElementById('chat-room-container');
-    if (chatRoomContainer) {
-      chatRoomContainer.scrollTo({
-        top: chatRoomContainer.scrollHeight,
-      });
-    }
-  }, []);
+    const lastChat = chatHistory[chatHistoryLength - 1];
+    const role = lastChat.role;
+
+    const lastQuestionBox = document.getElementById(
+      `${role}-${chatHistory.length.toString()}`
+    );
+
+    chatRoomContainer?.scrollTo({
+      behavior: 'smooth',
+      top:
+        (lastQuestionBox?.offsetTop ?? 0) +
+        (lastQuestionBox?.clientHeight ?? 0),
+    });
+  };
 
   const handleSendMessageAI = useCallback(
     async (customQuestion: string, customId?: string) => {
@@ -110,7 +117,6 @@ const InputPrompt = () => {
   );
 
   const handleInitiateChat = async () => {
-    handleScrollDown();
     setQuestion(inputValue);
     setIsLoadingAnswer(true);
     setInputValue('');
@@ -126,11 +132,14 @@ const InputPrompt = () => {
               id: now,
               createdAt: now,
             });
+            setTimeout(() => {
+              handleToLastQuestion();
+            }, 100);
           },
         }
       );
 
-      await sleep(1000);
+      await sleep(1500);
 
       await handleSendMessageAI(inputValue);
 
@@ -190,31 +199,6 @@ const InputPrompt = () => {
       document.removeEventListener('keydown', handleGlobalKeyDown);
     };
   }, []);
-
-  useEffect(() => {
-    const chatRoomContainer = document.getElementById('chat-room-container');
-
-    if (!chatRoomContainer || !isLoadingAnswer) {
-      return;
-    }
-
-    const scrollInterval = setInterval(() => {
-      const scrollHeight = chatRoomContainer.scrollHeight;
-      const scrollTop = chatRoomContainer.scrollTop;
-      const offsetHeight = chatRoomContainer.offsetHeight;
-
-      const isAtBottom =
-        Math.abs(scrollHeight - scrollTop - offsetHeight) < 400; // 400px tolerance
-
-      if (isAtBottom) {
-        handleScrollDown();
-      }
-    }, 100);
-
-    return () => {
-      clearInterval(scrollInterval);
-    };
-  }, [isLoadingAnswer]);
 
   return (
     <div className="relative w-full">

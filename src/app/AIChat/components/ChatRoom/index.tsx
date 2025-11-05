@@ -9,6 +9,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { UserRoleEnum } from '../../types/user-role.enum';
 import { EnumSpinnerType } from '../ChatSpinner/types';
 import ChatSpinner from '../ChatSpinner';
+import BubbleGap from '../BubbleGap';
 
 const ChatRoom = () => {
   const { answer: answerAI, isLoadingAnswer } = useSendAIMessageStore(
@@ -51,16 +52,17 @@ const ChatRoom = () => {
         id="chat-room-container"
       >
         {/* TODO: saved & unsaved message */}
-        {/* TODO: scroll the latest question to the top */}
-        {/* TODO: response answer loading appear first than question bubble */}
+        {/* TODO: logout */}
+        {/* TODO: scroll is not smooth */}
         <div className="flex flex-col gap-12 items-start w-[80%]">
-          {chat?.history.map((message) => {
+          {chat?.history.map((message, index) => {
             if (message.role === UserRoleEnum.USER) {
               return (
                 <QuestionBubble
                   date={message.createdAt}
                   key={message.id}
                   message={message.parts[0].text}
+                  index={index + 1}
                 />
               );
             }
@@ -70,6 +72,7 @@ const ChatRoom = () => {
                 date={message.createdAt}
                 key={message.id}
                 answer={message.parts[0].text}
+                index={index + 1}
               />
             );
           })}
@@ -79,6 +82,7 @@ const ChatRoom = () => {
               key="loading-answer"
               answer={answerAI}
               date={new Date().toLocaleString()}
+              index={0}
             />
           )}
 
@@ -89,7 +93,7 @@ const ChatRoom = () => {
           {/* TODO: fix here */}
           {/* <TodayDivider key="today-divider" /> */}
 
-          <div key="padding-spacer" className="p-[40px]" />
+          <BubbleGap conversationId={conversationId} />
         </div>
       </div>
     </div>

@@ -3,13 +3,17 @@ import { formatTimeAgo } from '../../utils/date/date';
 import MarkdownAnswer from '../MarkdownAnswer';
 
 interface AnswerBubbleProps {
+  index: number;
   answer: string;
   date: string;
 }
 
-const AnswerBubble = ({ answer, date }: AnswerBubbleProps) => {
+const AnswerBubble = ({ answer, date, index }: AnswerBubbleProps) => {
   return (
-    <div className="bg-gray-650 px-6 py-3 rounded-lg relative w-full">
+    <div
+      id={`model-${index.toString()}`}
+      className="bg-gray-650 px-6 py-3 rounded-lg relative w-full"
+    >
       <img
         src={ChatGPT}
         alt="chat-gpt"

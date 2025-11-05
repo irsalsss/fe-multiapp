@@ -4,11 +4,15 @@ import { formatTimeAgo } from '../../utils/date/date';
 interface QuestionBubbleProps {
   message: string;
   date: string;
+  index: number;
 }
 
-const QuestionBubble = ({ message, date }: QuestionBubbleProps) => {
+const QuestionBubble = ({ message, date, index }: QuestionBubbleProps) => {
   return (
-    <div className="bg-gray-400 px-6 py-3 rounded-lg relative w-full">
+    <div
+      id={`user-${index.toString()}`}
+      className="bg-gray-400 px-6 py-3 rounded-lg relative w-full"
+    >
       <img
         src={Avatar}
         alt="avatar"

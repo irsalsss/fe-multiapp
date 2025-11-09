@@ -3,6 +3,7 @@ import ChatGPTIcon from '../../../../../assets/icons/chat-gpt-white.svg?react';
 import { Link } from 'react-router-dom';
 import { ROUTE_AI_CHAT } from '../../../../../const/routes';
 import { formatRelativeDate } from '../../../utils/date/date';
+import { DrawingPinFilledIcon } from '@radix-ui/react-icons';
 
 interface ConversationsItemsProps {
   title: string;
@@ -10,6 +11,7 @@ interface ConversationsItemsProps {
   createdAt: string;
   isActive: boolean;
   conversationId: string;
+  isSaved: boolean;
 }
 
 const ConversationsItems = ({
@@ -18,7 +20,15 @@ const ConversationsItems = ({
   createdAt,
   isActive,
   conversationId,
+  isSaved,
 }: ConversationsItemsProps) => {
+  const iconClass = twMerge(
+    'absolute top-[14px] left-1 rounded-lg h-3 w-3',
+    isActive && 'left-[12px]',
+    'group-hover:left-[12px]',
+    isSaved && 'text-[#FEC553]'
+  );
+
   return (
     <Link to={`${ROUTE_AI_CHAT}/${conversationId}`} className="w-full">
       <div
@@ -28,13 +38,11 @@ const ConversationsItems = ({
           'hover:bg-gray-700 hover:rounded-[8px] hover:mx-[-8px] hover:px-8'
         )}
       >
-        <ChatGPTIcon
-          className={twMerge(
-            'absolute top-[14px] left-1 rounded-lg h-3 w-3',
-            isActive && 'left-[12px]',
-            'group-hover:left-[12px]'
-          )}
-        />
+        {isSaved ? (
+          <DrawingPinFilledIcon className={iconClass} />
+        ) : (
+          <ChatGPTIcon className={iconClass} />
+        )}
 
         <h5 className="text-[14px] font-semibold text-white capitalize truncate max-w-[90%]">
           {title}

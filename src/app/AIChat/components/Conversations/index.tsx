@@ -38,6 +38,7 @@ const Conversations = () => {
           createdAt={item.createdAt}
           conversationId={item.id}
           isActive={isActiveConversation(item.id)}
+          isSaved={item.isSaved}
         />
       ))}
     </div>

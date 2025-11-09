@@ -33,3 +33,15 @@ export const addChatQueryData = (queryClient: QueryClient, conversationId: strin
     return { ...oldData, history: newHistory };
   });
 };
+
+export const setSaveUnsaveChatQueryData = (queryClient: QueryClient, conversationId: string, isSaved: boolean) => {
+  queryClient.setQueryData([QUERY_KEY_CHAT, conversationId], (oldData: GetChatData | undefined) => {
+    if (!oldData?.history) {
+      return oldData;
+    }
+
+    oldData.isSaved = isSaved
+
+    return { ...oldData };
+  });
+}

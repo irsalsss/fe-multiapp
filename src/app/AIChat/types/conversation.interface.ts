@@ -4,4 +4,5 @@ export interface Conversation {
   description: string;
   createdAt: string;
   updatedAt: string;
+  isSaved: boolean;
 }

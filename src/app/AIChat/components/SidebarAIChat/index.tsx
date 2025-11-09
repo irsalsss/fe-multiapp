@@ -8,6 +8,7 @@ import Conversations from '../Conversations';
 import { useGetConversationsQuery } from '../../api/@query/use-get-conversations';
 import { Link } from 'react-router-dom';
 import { ROUTE_AI_CHAT } from '../../../../const/routes';
+import { useMemo } from 'react';
 
 const tabChatHistoryList = [
   {
@@ -26,6 +27,14 @@ const SidebarAIChat = () => {
   const { data } = useGetConversationsQuery(false);
   const converstionsLength = data?.length ?? 0;
 
+  const savedConvesations = useMemo(() => {
+    if (!data?.conversations) {
+      return [];
+    }
+
+    return data.conversations.filter((conv) => conv.isSaved);
+  }, [data?.conversations]);
+
   const { activeSidebar, setActiveSidebar } = useSidebarStore(
     useShallow((state) => ({
       activeSidebar: state.activeSidebar,
@@ -37,7 +46,7 @@ const SidebarAIChat = () => {
     setActiveSidebar(value);
   };
 
-  const totalTab = [converstionsLength, 0];
+  const totalTab = [converstionsLength, savedConvesations.length];
 
   return (
     <div className="bg-gray-600 min-w-[320px] w-[320px] flex-1 overflow-y-auto">

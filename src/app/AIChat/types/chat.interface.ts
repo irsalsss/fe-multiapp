@@ -1,3 +1,4 @@
+import type { Conversation } from "./conversation.interface";
 import type { UserRoleEnum } from "./user-role.enum";
 
 export interface ChatMessagePart {
@@ -13,7 +14,7 @@ export interface ChatMessage {
   parts: ChatMessagePart[];
 }
 
-export interface Chat {
+export interface Chat extends Conversation {
   id: string;
   history: ChatMessage[];
   createdAt: string;

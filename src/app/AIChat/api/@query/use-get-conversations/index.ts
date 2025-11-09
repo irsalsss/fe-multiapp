@@ -50,3 +50,20 @@ export const addConversationQueryData = (queryClient: QueryClient, conversationI
     return { ...oldData, conversations: newConversations };
   });
 }
+
+export const setSaveUnsaveConversationQueryData = (queryClient: QueryClient, conversationId: string, isSaved: boolean) => {
+  queryClient.setQueryData([QUERY_KEY_CONVERSATIONS], (oldData: GetConversationsData | undefined) => {
+    if (!oldData?.conversations) {
+      return oldData;
+    }
+
+    const updatedConversations = oldData.conversations.map(conv =>
+      conv.id === conversationId ? { ...conv, isSaved } : conv
+    );
+
+    return {
+      ...oldData,
+      conversations: updatedConversations,
+    };
+  });
+}

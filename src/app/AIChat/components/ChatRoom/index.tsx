@@ -24,11 +24,11 @@ const ChatRoom = () => {
   const params = useParams();
   const conversationId = params.conversationId ?? ('' as string);
 
-  const { data: chat } = useGetChatQuery(conversationId);
+  const { data: detailConversation } = useGetChatQuery(conversationId);
 
   const title = useMemo(() => {
-    return chat?.history[0]?.parts[0]?.text;
-  }, [chat]);
+    return detailConversation?.history[0]?.parts[0]?.text;
+  }, [detailConversation]);
 
   useEffect(() => {
     if (ref.current) {
@@ -51,11 +51,14 @@ const ChatRoom = () => {
         className="bg-gray-500 py-8 rounded-lg flex justify-center w-full overflow-y-auto flex-1"
         id="chat-room-container"
       >
-        {/* TODO: saved & unsaved message */}
+        {/* TODO: Handle audio and image */}
         {/* TODO: logout */}
         {/* TODO: scroll is not smooth */}
+        {/* TODO: infinite scroll */}
+        {/* TODO: handle react virtualization */}
+        {/* TODO: handle loading skeleton */}
         <div className="flex flex-col gap-12 items-start w-[80%]">
-          {chat?.history.map((message, index) => {
+          {detailConversation?.history.map((message, index) => {
             if (message.role === UserRoleEnum.USER) {
               return (
                 <QuestionBubble

@@ -2,11 +2,19 @@ import { useParams } from 'react-router-dom';
 import { useGetConversationsQuery } from '../../api/@query/use-get-conversations';
 import ConversationsItems from './ConversationsItems';
 import { useMemo } from 'react';
+import useSidebarStore, { ActiveSidebar } from '../../store/useSidebarStore';
+import { useShallow } from 'zustand/shallow';
 
 const Conversations = () => {
   const { data } = useGetConversationsQuery();
   const params = useParams();
   const conversationId = params.conversationId;
+
+  const { activeSidebar } = useSidebarStore(
+    useShallow((state) => ({
+      activeSidebar: state.activeSidebar,
+    }))
+  );
 
   const sortedConversations = useMemo(() => {
     const conversations = data?.conversations;
@@ -15,11 +23,18 @@ const Conversations = () => {
       return [];
     }
 
+    if (activeSidebar === ActiveSidebar.SAVED) {
+      return conversations.filter((conv) => conv.isSaved).sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+      );
+    }
+
     return conversations.sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
     );
-  }, [data]);
+  }, [data, activeSidebar]);
 
   const isActiveConversation = (id: string) => {
     return conversationId === id;

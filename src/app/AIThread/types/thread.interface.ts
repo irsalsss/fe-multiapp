@@ -18,4 +18,5 @@ export interface Thread extends Conversation {
   id: string;
   history: ThreadMessage[];
   createdAt: string;
+  updatedAt: string;
 }

@@ -49,7 +49,7 @@ const DropdownThread = () => {
     setIsOpen(false);
   });
 
-  const handleSaveThread = () => {
+  const handleSaveConversation = () => {
     if (!conversationId) {
       return;
     }
@@ -65,7 +65,7 @@ const DropdownThread = () => {
     setSaveUnsaveThreadQueryData(queryClient, conversationId, !isSaved);
   };
 
-  const handleDeleteThread = async () => {
+  const handleDeleteConversation = async () => {
     if (conversationId) {
       await deleteConversation(conversationId, {
         onSuccess: () => {
@@ -82,15 +82,15 @@ const DropdownThread = () => {
   const items = [
     {
       value: 'save',
-      label: isSaved ? 'Unsave Thread' : 'Save Thread',
+      label: isSaved ? 'Unsave Chat' : 'Save Chat',
       icon: isSaved ? <BookmarkFilledIcon /> : <BookmarkIcon />,
-      onClick: handleSaveThread,
+      onClick: handleSaveConversation,
     },
     {
       value: 'delete',
-      label: 'Delete Thread',
+      label: 'Delete Chat',
       icon: <TrashIcon />,
-      onClick: handleDeleteThread,
+      onClick: handleDeleteConversation,
     },
   ];
 

@@ -60,4 +60,4 @@ npm run lint
 ## Thanks
 
 Design inspiration from the Figma community:
-[@https://www.figma.com/design/ZcdYFLfNlOxu3c7tVzmU5R/ChatGPT-Redesign--Community-?node-id=0-1&t=wCJ7Zz6Z61jADRB8-0](https://www.figma.com/design/ZcdYFLfNlOxu3c7tVzmU5R/ChatGPT-Redesign--Community-?node-id=0-1&t=wCJ7Zz6Z61jADRB8-0)
+[@https://www.figma.com/design/ZcdYFLfNlOxu3c7tVzmU5R/ThreadGPT-Redesign--Community-?node-id=0-1&t=wCJ7Zz6Z61jADRB8-0](https://www.figma.com/design/ZcdYFLfNlOxu3c7tVzmU5R/ThreadGPT-Redesign--Community-?node-id=0-1&t=wCJ7Zz6Z61jADRB8-0)

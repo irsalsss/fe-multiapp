@@ -25,7 +25,6 @@ const tabThreadHistoryList = [
 
 const SidebarAIThread = () => {
   const { data } = useGetConversationsQuery(false);
-  const converstionsLength = data?.length ?? 0;
 
   const savedConvesations = useMemo(() => {
     if (!data?.conversations) {
@@ -46,7 +45,7 @@ const SidebarAIThread = () => {
     setActiveSidebar(value);
   };
 
-  const totalTab = [converstionsLength, savedConvesations.length];
+  const totalTab = [data?.conversations.length, savedConvesations.length];
 
   return (
     <div className="bg-gray-600 min-w-[320px] w-[320px] flex-1 overflow-y-auto">

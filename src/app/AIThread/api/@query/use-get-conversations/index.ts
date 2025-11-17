@@ -25,7 +25,11 @@ export const setConversationsQueryData = (queryClient: QueryClient, conversation
 
     const newConversations = oldData.conversations.map((conversation: Conversation) => {
       if (conversation.id === conversationId) {
-        return { ...conversation, description: answer };
+        return { 
+          ...conversation, 
+          description: answer,
+          updatedAt: new Date().toLocaleString()
+        };
       }
       return conversation;
     });
@@ -58,7 +62,11 @@ export const setSaveUnsaveConversationQueryData = (queryClient: QueryClient, con
     }
 
     const updatedConversations = oldData.conversations.map(conv =>
-      conv.id === conversationId ? { ...conv, isSaved } : conv
+      conv.id === conversationId ? { 
+        ...conv, 
+        isSaved,
+        updatedAt: new Date().toLocaleString()
+      } : conv
     );
 
     return {

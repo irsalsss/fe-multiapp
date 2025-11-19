@@ -1,6 +1,7 @@
 import Send from '../../../../assets/icons/send.svg?react';
 import ButtonIcon from '../ButtonIcon';
 import { ButtonSize, ButtonType } from '../ButtonIcon/types';
+import { twJoin } from 'tailwind-merge';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useGoogleAI from '../../hooks/useGoogleAI';
 import { useSendThread } from '../../api/@mutation/use-send-thread';
@@ -9,7 +10,7 @@ import {
   addConversationQueryData,
   setConversationsQueryData,
 } from '../../api/@query/use-get-conversations';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
 import useSendAIMessageStore from '../../store/useSendAIMessageStore';
 import { ROUTE_AI_THREAD } from '../../../../const/routes';
@@ -28,6 +29,7 @@ const InputPrompt = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const params = useParams();
+  const { pathname } = useLocation();
   const navigate = useNavigate();
 
   const conversationId = params.conversationId ?? '';
@@ -60,7 +62,9 @@ const InputPrompt = () => {
   };
 
   const handleToLastQuestion = () => {
-    const threadRoomContainer = document.getElementById('thread-room-container');
+    const threadRoomContainer = document.getElementById(
+      'thread-room-container'
+    );
     const lastThread = threadHistory[threadHistoryLength - 1];
     const role = lastThread.role;
 
@@ -200,13 +204,19 @@ const InputPrompt = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (inputRef.current && pathname === ROUTE_AI_THREAD) {
+      inputRef.current.focus();
+    }
+  }, [pathname]);
+
   return (
     <div className="relative w-full">
       <ButtonIcon
         type={ButtonType.Tertiary}
         size={ButtonSize.Medium}
         icon={<Send />}
-        className="absolute top-[12px] right-[12px] rounded-lg h-8 w-8"
+        className="absolute top-[12px] right-[12px] rounded-lg h-8 w-8 z-10"
         onClick={() => {
           void handleInitiateThread();
         }}
@@ -217,7 +227,15 @@ const InputPrompt = () => {
         name="input-prompt"
         placeholder="Ask questions, or type '/' for commands"
         type="text"
-        className="w-full h-[56px] rounded-lg bg-gray-400 border-gray-400 pl-[20px] pr-[56px] py-[20px] placeholder:text-gray-200 placeholder:text-[12px] text-[12px] focus:outline-none focus:border-gray-800 border"
+        className={twJoin(
+          'w-full h-[56px] rounded-xl bg-white/5 backdrop-blur-sm border border-white/10',
+          'pl-[20px] pr-[56px] py-[20px]',
+          'placeholder:text-white/60 placeholder:text-[12px] text-[12px] text-white',
+          'focus:outline-none focus:border-white/30 focus:bg-white/10',
+          'transition-all duration-200 animate-pulse hover:animate-none focus:animate-none',
+          'hover:border-blue-400/50 focus:border-blue-400/70',
+          'hover:shadow-lg hover:shadow-blue-400/20 focus:shadow-xl focus:shadow-blue-400/30'
+        )}
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handlePressEnter}

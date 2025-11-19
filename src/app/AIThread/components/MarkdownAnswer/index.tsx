@@ -1,5 +1,6 @@
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { twJoin } from 'tailwind-merge';
 
 interface MarkdownAnswerProps {
   answer: string;
@@ -46,12 +47,24 @@ const MarkdownAnswer = ({ answer }: MarkdownAnswerProps) => {
           </p>
         ),
         ul: ({ children }) => (
-          <ul className="text-[12px] leading-[16px] font-normal list-disc list-outside space-y-1 ml-2 pl-4 mb-4 last:mb-0">
+          <ul
+            className={twJoin(
+              'text-[12px] leading-[16px] font-normal',
+              'list-disc list-outside space-y-1',
+              'ml-2 pl-4 mb-4 last:mb-0'
+            )}
+          >
             {children}
           </ul>
         ),
         ol: ({ children }) => (
-          <ol className="text-[12px] leading-[16px] font-normal list-decimal list-outside space-y-1 ml-2 pl-4 mb-4 last:mb-0">
+          <ol
+            className={twJoin(
+              'text-[12px] leading-[16px] font-normal',
+              'list-decimal list-outside space-y-1',
+              'ml-2 pl-4 mb-4 last:mb-0'
+            )}
+          >
             {children}
           </ol>
         ),
@@ -66,7 +79,10 @@ const MarkdownAnswer = ({ answer }: MarkdownAnswerProps) => {
         a: ({ href, children }) => (
           <a
             href={href}
-            className="text-[12px] leading-[16px] text-blue-600 hover:text-blue-800 underline"
+            className={twJoin(
+              'text-[12px] leading-[16px] underline',
+              'text-blue-600 hover:text-blue-800'
+            )}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -77,23 +93,36 @@ const MarkdownAnswer = ({ answer }: MarkdownAnswerProps) => {
           const isInline = !props.className?.includes('language-');
           return (
             <code
-              className={`${
+              className={twJoin(
+                'font-mono leading-relaxed',
                 isInline
                   ? 'text-[12px] bg-gray-200 text-gray-400 px-2 py-1 rounded-md border'
                   : 'block text-[12px] bg-gray-900 text-gray-100 p-4 rounded-lg mb-4 last:mb-0 overflow-x-auto border border-gray-700'
-              } font-mono leading-relaxed`}
+              )}
             >
               {children}
             </code>
           );
         },
         pre: ({ children }) => (
-          <pre className="text-sm bg-gray-900 text-gray-100 p-4 rounded-lg mb-4 last:mb-0 overflow-x-auto font-mono leading-relaxed border border-gray-700 shadow-lg">
+          <pre
+            className={twJoin(
+              'text-sm bg-gray-900 text-gray-100 p-4 rounded-lg',
+              'mb-4 last:mb-0 overflow-x-auto font-mono leading-relaxed',
+              'border border-gray-700 shadow-lg'
+            )}
+          >
             {children}
           </pre>
         ),
         blockquote: ({ children }) => (
-          <blockquote className="text-[12px] leading-[20px] font-normal border-l-4 border-gray-300 pl-4 ml-2 mb-4 last:mb-0 italic">
+          <blockquote
+            className={twJoin(
+              'text-[12px] leading-[20px] font-normal italic',
+              'border-l-4 border-gray-300 pl-4 ml-2',
+              'mb-4 last:mb-0'
+            )}
+          >
             {children}
           </blockquote>
         ),
@@ -108,12 +137,20 @@ const MarkdownAnswer = ({ answer }: MarkdownAnswerProps) => {
           return (
             <div className="mb-4 last:mb-0">
               {caption && (
-                <p className="text-[12px] leading-[16px] font-semibold text-center mb-1 text-gray-200">
+                <p
+                  className={twJoin(
+                    'text-[12px] leading-[16px] font-semibold',
+                    'text-center mb-1 text-gray-200'
+                  )}
+                >
                   {caption}
                 </p>
               )}
               <table
-                className="text-[13px] border-collapse border border-gray-500 w-full rounded-lg overflow-hidden shadow-sm bg-gray-650"
+                className={twJoin(
+                  'text-[13px] border-collapse border border-gray-500',
+                  'w-full rounded-lg overflow-hidden shadow-sm bg-gray-650'
+                )}
                 {...props}
               >
                 {children}
@@ -136,7 +173,10 @@ const MarkdownAnswer = ({ answer }: MarkdownAnswerProps) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tr: ({ children, node, ...props }) => (
           <tr
-            className="border-b border-gray-500 transition-colors hover:bg-gray-600"
+            className={twJoin(
+              'border-b border-gray-500',
+              'transition-colors hover:bg-gray-600'
+            )}
             {...props}
           >
             {children}
@@ -145,7 +185,10 @@ const MarkdownAnswer = ({ answer }: MarkdownAnswerProps) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         th: ({ children, node, ...props }) => (
           <th
-            className="border border-gray-500 px-4 py-3 text-left font-semibold text-gray-200 bg-gray-700"
+            className={twJoin(
+              'border border-gray-500 px-4 py-3',
+              'text-left font-semibold text-gray-200 bg-gray-700'
+            )}
             {...props}
           >
             {children}
@@ -154,7 +197,10 @@ const MarkdownAnswer = ({ answer }: MarkdownAnswerProps) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         td: ({ children, node, ...props }) => (
           <td
-            className="border border-gray-500 px-4 py-3 text-gray-200 leading-relaxed bg-gray-400"
+            className={twJoin(
+              'border border-gray-500 px-4 py-3',
+              'text-gray-200 leading-relaxed bg-gray-400'
+            )}
             {...props}
           >
             {children}

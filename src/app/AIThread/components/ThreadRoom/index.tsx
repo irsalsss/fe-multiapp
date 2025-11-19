@@ -1,6 +1,7 @@
 import AnswerBubble from '../AnswerBubble';
 import QuestionBubble from '../QuestionBubble';
 import { useParams } from 'react-router-dom';
+import { twJoin } from 'tailwind-merge';
 import { useGetThreadQuery } from '../../api/@query/use-get-thread';
 import { useEffect, useMemo, useRef } from 'react';
 import DropdownThread from '../DropdownThread';
@@ -48,16 +49,18 @@ const ThreadRoom = () => {
 
       <div
         ref={ref}
-        className="bg-gray-500 py-8 rounded-lg flex justify-center w-full overflow-y-auto flex-1"
+        className={twJoin(
+          'bg-gray-500 py-8 rounded-lg',
+          'flex justify-center w-full overflow-y-auto flex-1'
+        )}
         id="thread-room-container"
       >
+        {/* TODO: handle success message */}
         {/* TODO: Handle audio and image */}
         {/* TODO: logout */}
-        {/* TODO: scroll is not smooth */}
         {/* TODO: infinite scroll */}
         {/* TODO: handle react virtualization */}
-        {/* TODO: handle loading skeleton */}
-        <div className="flex flex-col gap-12 items-start w-[80%]">
+        <div className="flex flex-col gap-12 items-start w-[65%]">
           {detailConversation?.history.map((message, index) => {
             if (message.role === UserRoleEnum.USER) {
               return (

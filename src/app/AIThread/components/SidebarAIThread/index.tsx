@@ -1,5 +1,6 @@
 import { useShallow } from 'zustand/shallow';
 import NewThreadIcon from '../../../../assets/icons/new-thread-green.svg?react';
+import { twJoin } from 'tailwind-merge';
 import SavedIcon from '../../../../assets/icons/saved.svg?react';
 import ThreadBubbleIcon from '../../../../assets/icons/thread-bubble.svg?react';
 import TabThreadHistory from '../TabThreadHistory';
@@ -55,7 +56,12 @@ const SidebarAIThread = () => {
 
           <div className="flex items-center gap-[10px]">
             <Link to={ROUTE_AI_THREAD}>
-              <NewThreadIcon className="cursor-pointer hover:opacity-80 hover:scale-110 transition-all duration-300" />
+              <NewThreadIcon
+                className={twJoin(
+                  'cursor-pointer hover:opacity-80 hover:scale-110',
+                  'transition-all duration-300'
+                )}
+              />
             </Link>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { useShallow } from 'zustand/react/shallow';
 import useSendAIMessageStore from '../../store/useSendAIMessageStore';
+import { twJoin } from 'tailwind-merge';
 
 const AINewThreadContainer = () => {
   const { question } = useSendAIMessageStore(
@@ -17,7 +18,12 @@ const AINewThreadContainer = () => {
         </h2>
       </div>
 
-      <div className="bg-gray-500 py-8 rounded-lg flex justify-center w-full overflow-y-auto flex-1">
+      <div
+        className={twJoin(
+          'bg-gray-500 py-8 rounded-lg',
+          'flex justify-center w-full overflow-y-auto flex-1'
+        )}
+      >
         <div className="flex items-center justify-center h-full w-full">
           <p className="text-center text-white">
             Ready when you are. Ask me anything!

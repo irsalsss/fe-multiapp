@@ -4,9 +4,13 @@ import ConversationsItems from './ConversationsItems';
 import { useMemo } from 'react';
 import useSidebarStore, { ActiveSidebar } from '../../store/useSidebarStore';
 import { useShallow } from 'zustand/shallow';
+import ThreadSpinner from '../ThreadSpinner';
+import { EnumSpinnerType } from '../ThreadSpinner/types';
+import { twMerge } from 'tailwind-merge';
 
 const Conversations = () => {
-  const { data } = useGetConversationsQuery();
+  const { data, isLoading: isLoadingGetConversations } =
+    useGetConversationsQuery();
   const params = useParams();
   const conversationId = params.conversationId;
 
@@ -24,10 +28,12 @@ const Conversations = () => {
     }
 
     if (activeSidebar === ActiveSidebar.SAVED) {
-      return conversations.filter((conv) => conv.isSaved).sort(
-        (a, b) =>
-          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-      );
+      return conversations
+        .filter((conv) => conv.isSaved)
+        .sort(
+          (a, b) =>
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        );
     }
 
     return conversations.sort(
@@ -43,19 +49,33 @@ const Conversations = () => {
   return (
     <div
       data-testid="conversations-container"
-      className="flex flex-col gap-[10px] px-4 pb-4"
+      className="flex flex-col gap-[10px] px-4 pb-4 relative"
     >
-      {sortedConversations.map((item) => (
-        <ConversationsItems
-          key={item.id}
-          title={item.title}
-          description={item.description}
-          createdAt={item.createdAt}
-          conversationId={item.id}
-          isActive={isActiveConversation(item.id)}
-          isSaved={item.isSaved}
-        />
-      ))}
+      {!isLoadingGetConversations &&
+        sortedConversations.map((item) => (
+          <ConversationsItems
+            key={item.id}
+            title={item.title}
+            description={item.description}
+            createdAt={item.createdAt}
+            conversationId={item.id}
+            isActive={isActiveConversation(item.id)}
+            isSaved={item.isSaved}
+          />
+        ))}
+
+      {isLoadingGetConversations && (
+        <div
+          id="conversations-spinner"
+          className={twMerge(
+            'flex justify-center items-center',
+            'absolute translate-y-[-10%] left-[50%] -translate-x-1/2',
+            'h-screen'
+          )}
+        >
+          <ThreadSpinner type={EnumSpinnerType.AURORA_SPIN} />
+        </div>
+      )}
     </div>
   );
 };

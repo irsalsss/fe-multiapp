@@ -1,4 +1,4 @@
-import { twMerge } from 'tailwind-merge';
+import { twJoin, twMerge } from 'tailwind-merge';
 import ThreadGPTIcon from '../../../../../assets/icons/thread-gpt-white.svg?react';
 import { Link } from 'react-router-dom';
 import { ROUTE_AI_THREAD } from '../../../../../const/routes';
@@ -33,7 +33,8 @@ const ConversationsItems = ({
     <Link to={`${ROUTE_AI_THREAD}/${conversationId}`} className="w-full">
       <div
         className={twMerge(
-          'group py-[10px] px-6 flex flex-col gap-[6px] relative cursor-pointer',
+          'group py-[10px] px-6 flex flex-col gap-[6px]',
+          'relative cursor-pointer',
           isActive && 'bg-gray-700 rounded-[8px] mx-[-8px] px-8',
           'hover:bg-gray-700 hover:rounded-[8px] hover:mx-[-8px] hover:px-8'
         )}
@@ -44,13 +45,19 @@ const ConversationsItems = ({
           <ThreadGPTIcon className={iconClass} />
         )}
 
-        <h5 className="text-[14px] font-semibold text-white capitalize truncate max-w-[90%]">
+        <h5
+          className={twJoin(
+            'text-[14px] font-semibold text-white capitalize',
+            'truncate max-w-[90%]'
+          )}
+        >
           {title}
         </h5>
         <p className="text-[12px] text-gray-200 line-clamp-2">{description}</p>
         <p
           className={twMerge(
-            'text-[10px] leading-[8px] text-gray-200 absolute top-[16px] right-0 opacity-60',
+            'text-[10px] leading-[8px] text-gray-200 opacity-60',
+            'absolute top-[16px] right-0',
             isActive && 'right-[8px]',
             'group-hover:right-[8px]'
           )}

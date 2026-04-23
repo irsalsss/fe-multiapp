@@ -29,7 +29,7 @@ const useGoogleAI = () => {
     let chunkIndex = 0;
 
     const response = await googleAI.models.generateContentStream({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3.1-flash-lite-preview',
       contents: message,
       config: {
         maxOutputTokens: 1000,
@@ -56,7 +56,7 @@ const useGoogleAI = () => {
         role: 'model',
         content: answer,
         metadata: {
-          model: 'gemini-2.0-flash',
+          model: 'gemini-3.1-flash-lite-preview',
           responseTimeMs,
           streamChunks,
         }

@@ -46,7 +46,7 @@ const SidebarAIThread = () => {
     setActiveSidebar(value);
   };
 
-  const totalTab = [data?.conversations.length, savedConvesations.length];
+  const totalTab = [data?.conversations?.length, savedConvesations?.length];
 
   return (
     <div className="bg-gray-600 min-w-[320px] w-[320px] flex-1 overflow-y-auto">

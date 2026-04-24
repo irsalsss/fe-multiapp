@@ -8,10 +8,10 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "lerna run dev --scope=@app/ai-thread --stream",
+    "build": "lerna run build",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "lerna run preview --scope=@app/ai-thread --stream",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"

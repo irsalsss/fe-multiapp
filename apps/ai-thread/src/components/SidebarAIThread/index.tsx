@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom';
 import { ROUTE_AI_THREAD } from '../../const/routes';
 import { useMemo } from 'react';
 
+import { useInputPromptStore } from '../../store/useInputPromptStore';
+
 const tabThreadHistoryList = [
   {
     title: 'Chats',
@@ -26,6 +28,7 @@ const tabThreadHistoryList = [
 
 const SidebarAIThread = () => {
   const { data } = useGetConversationsQuery(false);
+  const triggerFocus = useInputPromptStore((state) => state.triggerFocus);
 
   const savedConvesations = useMemo(() => {
     if (!data?.conversations) {
@@ -55,7 +58,7 @@ const SidebarAIThread = () => {
           <h2 className="text-[20px] font-bold text-white">My Chats</h2>
 
           <div className="flex items-center gap-[10px]">
-            <Link to={ROUTE_AI_THREAD}>
+            <Link to={ROUTE_AI_THREAD} onClick={triggerFocus}>
               <NewThreadIcon
                 className={twJoin(
                   'cursor-pointer hover:opacity-80 hover:scale-110',

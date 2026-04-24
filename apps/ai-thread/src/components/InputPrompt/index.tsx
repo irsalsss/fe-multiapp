@@ -2,7 +2,7 @@ import Send from '../../assets/icons/send.svg?react';
 import ButtonIcon from '../ButtonIcon';
 import { ButtonSize, ButtonType } from '../ButtonIcon/types';
 import { twJoin } from 'tailwind-merge';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import useGoogleAI from '../../hooks/useGoogleAI';
 import { useSendThread } from '../../api/@mutation/use-send-thread';
 import { useQueryClient } from '@tanstack/react-query';
@@ -10,7 +10,7 @@ import {
   addConversationQueryData,
   setConversationsQueryData,
 } from '../../api/@query/use-get-conversations';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
 import useSendAIMessageStore from '../../store/useSendAIMessageStore';
 import { ROUTE_AI_THREAD } from '../../const/routes';
@@ -24,12 +24,13 @@ import {
 import { UserRoleEnum } from '../../types/user-role.enum';
 import { sleep } from '../../utils/sleep';
 
+import { useFocusInput } from '../../hooks/useFocusInput';
+
 const InputPrompt = () => {
   const [inputValue, setInputValue] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useFocusInput();
 
   const params = useParams();
-  const { pathname } = useLocation();
   const navigate = useNavigate();
 
   const conversationId = params.conversationId ?? '';
@@ -185,30 +186,6 @@ const InputPrompt = () => {
     }
   };
 
-  useEffect(() => {
-    const handleGlobalKeyDown = (event: KeyboardEvent) => {
-      if (
-        event.key === '/' &&
-        document.activeElement?.tagName !== 'INPUT' &&
-        document.activeElement?.tagName !== 'TEXTAREA'
-      ) {
-        event.preventDefault();
-        inputRef.current?.focus();
-      }
-    };
-
-    document.addEventListener('keydown', handleGlobalKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleGlobalKeyDown);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (inputRef.current && pathname === ROUTE_AI_THREAD) {
-      inputRef.current.focus();
-    }
-  }, [pathname]);
 
   return (
     <div className="relative w-full">

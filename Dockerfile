@@ -13,9 +13,8 @@ WORKDIR /app
 # Copy root configurations
 COPY package.json package-lock.json lerna.json ./
 
-# Copy all packages and apps to handle dependencies
+# Copy all apps to handle dependencies
 COPY apps/ ./apps/
-COPY packages/ ./packages/
 
 # Install dependencies for the entire monorepo
 RUN npm ci
@@ -39,8 +38,7 @@ RUN mkdir -p /usr/share/nginx/html/dashboard
 # Copy build artifacts from builder stage
 # Assuming vite output is in 'dist' folder of each app
 COPY --from=builder /app/apps/ai-thread/dist /usr/share/nginx/html/ai-thread
-# Placeholder for dashboard if it doesn't exist yet, uncomment when ready
-# COPY --from=builder /app/apps/dashboard/dist /usr/share/nginx/html/dashboard
+COPY --from=builder /app/apps/dashboard/dist /usr/share/nginx/html/dashboard
 
 EXPOSE 80
 

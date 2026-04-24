@@ -5,7 +5,7 @@ import svgr from "vite-plugin-svgr";
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/app/ai-thread/',
+  base: '/ai-thread/',
   plugins: [
     react(), 
     tailwindcss(), 

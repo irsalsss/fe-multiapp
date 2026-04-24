@@ -1,13 +1,13 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import './styles/global.css';
-import AIThreadContainer from './app/AIThread/containers/AIThreadContainer';
+import AIThreadContainer from './containers/AIThreadContainer';
 import { ClerkProvider, SignIn } from '@clerk/clerk-react';
 import UnauthenticatedLayout from './components/layouts/UnauthenticatedLayout';
 import AuthenticatedLayout from './components/layouts/AuthenticatedLayout';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ROUTE_AI_THREAD, ROUTE_SIGN_IN } from './const/routes';
-import ThreadRoom from './app/AIThread/components/ThreadRoom';
-import AINewThreadContainer from './app/AIThread/containers/AINewThreadContainer';
+import ThreadRoom from './components/ThreadRoom';
+import AINewThreadContainer from './containers/AINewThreadContainer';
 
 const PUBLISHABLE_KEY =
   (import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string) || '';

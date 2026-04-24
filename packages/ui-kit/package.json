@@ -1,9 +1,0 @@
-{
-  "name": "@app/ui-kit",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "echo 'No build script for ui-kit yet'"
-  }
-}

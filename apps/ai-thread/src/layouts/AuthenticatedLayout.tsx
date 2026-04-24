@@ -1,6 +1,6 @@
 import { useUser } from '@clerk/clerk-react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { ROUTE_SIGN_IN } from '../../const/routes';
+import { ROUTE_SIGN_IN } from '../const/routes';
 
 const AuthenticatedLayout = () => {
   const { isLoaded, isSignedIn } = useUser();

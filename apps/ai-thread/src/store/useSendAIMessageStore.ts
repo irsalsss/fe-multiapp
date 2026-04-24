@@ -28,6 +28,9 @@ interface AIStore {
 
   messagesAI: Message[];
   setMessagesAI: (newMessagesAI: Message) => void;
+
+  error: any | null;
+  setError: (error: any | null) => void;
 }
 
 const useSendAIMessageStore = create<AIStore>((set) => ({
@@ -42,6 +45,9 @@ const useSendAIMessageStore = create<AIStore>((set) => ({
 
   messagesAI: [],
   setMessagesAI: (newMessagesAI) => { set((state) => ({ messagesAI: [...state.messagesAI, newMessagesAI]})); },
+
+  error: null,
+  setError: (error) => { set({ error }); },
 }))
 
 export default useSendAIMessageStore;

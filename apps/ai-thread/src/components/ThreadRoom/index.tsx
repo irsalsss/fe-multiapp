@@ -13,10 +13,11 @@ import ThreadSpinner from '../ThreadSpinner';
 import BubbleGap from '../BubbleGap';
 
 const ThreadRoom = () => {
-  const { answer: answerAI, isLoadingAnswer } = useSendAIMessageStore(
+  const { answer: answerAI, isLoadingAnswer, error } = useSendAIMessageStore(
     useShallow((state) => ({
       answer: state.answer,
       isLoadingAnswer: state.isLoadingAnswer,
+      error: state.error,
     }))
   );
 
@@ -94,6 +95,12 @@ const ThreadRoom = () => {
 
           {isLoadingAnswer && (
             <ThreadSpinner type={EnumSpinnerType.GRADIENT_PULSE} />
+          )}
+
+          {!isLoadingAnswer && !!error && (
+            <div className='mt-4'>
+              <p className='text-red-500'>{error.message}</p>
+            </div>
           )}
 
           {/* TODO: fix here */}

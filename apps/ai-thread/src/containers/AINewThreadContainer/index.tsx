@@ -5,7 +5,6 @@ import { twJoin } from 'tailwind-merge';
 const AINewThreadContainer = () => {
   const { question } = useSendAIMessageStore(
     useShallow((state) => ({
-      answer: state.answer,
       question: state.question,
     }))
   );

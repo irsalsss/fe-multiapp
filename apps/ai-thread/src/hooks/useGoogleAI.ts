@@ -8,10 +8,12 @@ interface SendGoogleAIMessageProps {
 }
 
 const useGoogleAI = () => {
-  const { setMessagesAI, setAnswer } = useSendAIMessageStore(
+  const { setMessagesAI, setAnswer, setError, setIsLoadingAnswer } = useSendAIMessageStore(
     useShallow((state) => ({
       setMessagesAI: state.setMessagesAI,
       setAnswer: state.setAnswer,
+      setError: state.setError,
+      setIsLoadingAnswer: state.setIsLoadingAnswer
     })),
   )
 
@@ -20,6 +22,7 @@ const useGoogleAI = () => {
   const googleAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
   const sendGoogleAIMessage = async ({ message, onSuccess }: SendGoogleAIMessageProps) => {
+    setError(null);
     if (!message) {
       throw new Error('Message is required');
     }
@@ -64,6 +67,8 @@ const useGoogleAI = () => {
       await onSuccess(answer);
     } catch (error) {
       console.error('Error generating content:', error);
+      setError(error);
+      setIsLoadingAnswer(false)
     }
   };
 

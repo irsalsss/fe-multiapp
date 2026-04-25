@@ -193,7 +193,7 @@ const InputPrompt = () => {
         type={ButtonType.Tertiary}
         size={ButtonSize.Medium}
         icon={<Send />}
-        className="absolute top-[12px] right-[12px] rounded-lg h-8 w-8 z-10"
+        className="absolute top-[50%] translate-y-[-50%] right-[12px] rounded-lg h-8 w-8 z-10"
         onClick={() => {
           void handleInitiateThread();
         }}
@@ -205,9 +205,10 @@ const InputPrompt = () => {
         placeholder="Ask questions, or type '/' for commands"
         type="text"
         className={twJoin(
-          'w-full h-[56px] rounded-xl bg-white/5 backdrop-blur-sm border border-white/10',
+          'w-full rounded-xl bg-white/5 backdrop-blur-sm border border-white/10',
           'pl-[20px] pr-[56px] py-[20px]',
-          'placeholder:text-white/60 placeholder:text-[12px] text-[12px] text-white',
+          'md:h-[64px] md:placeholder:text-[16px] md:text-[16px]',
+          'placeholder:text-white/60 h-[56px] placeholder:text-[12px] text-[12px] text-white',
           'focus:outline-none focus:border-white/30 focus:bg-white/10',
           'transition-all duration-200 animate-pulse hover:animate-none focus:animate-none',
           'hover:border-blue-400/50 focus:border-blue-400/70',

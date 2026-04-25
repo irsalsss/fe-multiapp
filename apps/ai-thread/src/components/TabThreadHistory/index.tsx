@@ -6,6 +6,7 @@ interface TabThreadHistoryProps {
   icon: React.ReactNode;
   onClick?: VoidFunction;
   active?: boolean;
+  className?: string;
 }
 
 const TabThreadHistory = ({
@@ -14,6 +15,7 @@ const TabThreadHistory = ({
   icon,
   onClick,
   active,
+  className,
 }: TabThreadHistoryProps) => {
   const activeClass = active
     ? 'bg-gray-700 text-green-100'
@@ -28,27 +30,32 @@ const TabThreadHistory = ({
       className={twMerge(
         activeClass,
         'flex uppercase justify-center transition-all duration-300',
-        'items-center w-full rounded-[6px] gap-2 cursor-pointer py-3 px-6 group'
+        'items-center w-full rounded-[6px] gap-2 cursor-pointer py-3 px-6 group',
+        className
       )}
     >
       {icon}
-      <span
-        className={twJoin(
-          'text-[10px] leading-[8px] font-semibold',
-          'group-hover:text-green-100'
-        )}
-      >
-        {title}
-      </span>
-      <span
-        className={twMerge(
-          'py-[2px] font-semibold rounded-[4px]',
-          'text-[10px] leading-[12px] bg-gray-400 px-1',
-          activeTotalClass
-        )}
-      >
-        {total ?? 0}
-      </span>
+      {title && (
+        <span
+          className={twJoin(
+            'text-[10px] leading-[8px] font-semibold',
+            'group-hover:text-green-100'
+          )}
+        >
+          {title}
+        </span>
+      )}
+      {typeof total === 'number' && (
+        <span
+          className={twMerge(
+            'py-[2px] font-semibold rounded-[4px]',
+            'text-[10px] leading-[12px] bg-gray-400 px-1',
+            activeTotalClass
+          )}
+        >
+          {total}
+        </span>
+      )}
     </div>
   );
 };

@@ -11,6 +11,7 @@ interface ConversationsItemsProps {
   isActive: boolean;
   conversationId: string;
   isSaved: boolean;
+  isCollapsed?: boolean;
 }
 
 const ConversationsItems = ({
@@ -20,7 +21,28 @@ const ConversationsItems = ({
   isActive,
   conversationId,
   isSaved,
+  isCollapsed,
 }: ConversationsItemsProps) => {
+  if (isCollapsed) {
+    return (
+      <Link to={conversationId} className="w-full flex justify-center" title={title}>
+        <div
+          className={twMerge(
+            'group p-3 flex items-center justify-center relative cursor-pointer',
+            'transition-all duration-300',
+            isActive ? 'bg-gray-700 rounded-lg text-green-300' : 'hover:bg-gray-700/50 rounded-lg text-white'
+          )}
+        >
+          {isSaved ? (
+            <DrawingPinFilledIcon className="w-5 h-5 text-[#FEC553]" />
+          ) : (
+            <ThreadGPTIcon className={twJoin("w-5 h-5", isActive ? "text-green-300" : "text-white")} />
+          )}
+        </div>
+      </Link>
+    );
+  }
+
   const iconClass = twMerge(
     'absolute top-[14px] left-1 rounded-lg h-3 w-3',
     isActive && 'left-[12px]',
@@ -33,7 +55,7 @@ const ConversationsItems = ({
       <div
         className={twMerge(
           'group py-[10px] px-6 flex flex-col gap-[6px]',
-          'relative cursor-pointer',
+          'relative cursor-pointer transition-all duration-200',
           isActive && 'bg-gray-700 rounded-[8px] mx-[-8px] px-8',
           'hover:bg-gray-700 hover:rounded-[8px] hover:mx-[-8px] hover:px-8'
         )}

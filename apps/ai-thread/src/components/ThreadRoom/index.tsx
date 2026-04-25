@@ -52,7 +52,7 @@ const ThreadRoom = () => {
 
   return (
     <div className="flex flex-col w-full relative">
-      <div className="h-[64px] py-5 px-6 pr-0 flex justify-between items-center">
+      <div className="h-[64px] py-5 px-6 flex justify-between items-center">
         <h2 className="text-[20px] font-bold text-white capitalize">{title}</h2>
 
         <DropdownThread />
@@ -61,7 +61,7 @@ const ThreadRoom = () => {
       <div
         ref={ref}
         className={twJoin(
-          'bg-gray-500 py-8 rounded-lg',
+          'bg-gray-500 py-8',
           'flex justify-center w-full overflow-y-auto flex-1'
         )}
         id="thread-room-container"
@@ -69,8 +69,7 @@ const ThreadRoom = () => {
         {/* TODO: Handle audio and image */}
         {/* TODO: infinite scroll */}
         {/* TODO: handle react virtualization */}
-        {/* TODO-important: handle responsive */}
-        <div className="flex flex-col gap-12 items-start w-[65%]">
+        <div className="flex flex-col gap-12 items-start md:w-[65%] w-[75%]">
           {detailConversation?.history.map((message, index) => {
             if (message.role === UserRoleEnum.USER) {
               return (

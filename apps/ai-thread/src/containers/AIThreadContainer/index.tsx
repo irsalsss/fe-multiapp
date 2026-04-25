@@ -5,11 +5,19 @@ import { twJoin } from 'tailwind-merge';
 import useDetectIncognito from '../../hooks/useDetectIncognito';
 import IncognitoModal from '../../components/IncognitoModal';
 import useZombieCookie from '../../hooks/useZombieCookie';
+import { useGetStatsUsageQuery } from '../../api/@query/use-get-stats-usage';
+import { useUser } from '@clerk/clerk-react';
+import Cookies from 'js-cookie';
+import { COOKIE_X_GUEST_ID } from '../../const/cookies';
 
 const AIThreadContainer: React.FC = () => {
   const { isIncognito } = useDetectIncognito();
 
+  const { user } = useUser();
+  const userId = user?.id || Cookies.get(COOKIE_X_GUEST_ID) || '';
+
   useZombieCookie();
+  useGetStatsUsageQuery(userId, !!userId);
 
   if (isIncognito) {
     return (

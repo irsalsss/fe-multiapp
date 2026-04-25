@@ -1,6 +1,11 @@
 import { useShallow } from 'zustand/react/shallow';
 import useSendAIMessageStore from '../../store/useSendAIMessageStore';
 import { twJoin } from 'tailwind-merge';
+import useZombieCookie from '../../hooks/useZombieCookie';
+import { useGetStatsUsageQuery } from '../../api/@query/use-get-stats-usage';
+import { useUser } from '@clerk/clerk-react';
+import Cookies from 'js-cookie';
+import { COOKIE_X_GUEST_ID } from '../../const/cookies';
 
 const AINewThreadContainer = () => {
   const { question } = useSendAIMessageStore(
@@ -8,6 +13,12 @@ const AINewThreadContainer = () => {
       question: state.question,
     }))
   );
+
+  const { user } = useUser();
+  const userId = user?.id || Cookies.get(COOKIE_X_GUEST_ID) || '';
+
+  useZombieCookie();
+  useGetStatsUsageQuery(userId, !!userId);
 
   return (
     <div className="flex flex-col w-full relative">

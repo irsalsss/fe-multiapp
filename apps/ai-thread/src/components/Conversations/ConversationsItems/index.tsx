@@ -30,7 +30,7 @@ const ConversationsItems = ({
   );
 
   return (
-    <Link to={`${ROUTE_AI_THREAD}/${conversationId}`} className="w-full">
+    <Link to={conversationId} className="w-full">
       <div
         className={twMerge(
           'group py-[10px] px-6 flex flex-col gap-[6px]',

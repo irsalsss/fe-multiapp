@@ -1,0 +1,3 @@
+export const USER_THREADS_24_HOURS_LIMIT = 6;
+export const GUEST_THREADS_24_HOURS_LIMIT = 3;
+export const GLOBAL_THREADS_24_HOURS_LIMIT = 30;

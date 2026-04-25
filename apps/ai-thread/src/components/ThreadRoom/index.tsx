@@ -66,11 +66,9 @@ const ThreadRoom = () => {
         )}
         id="thread-room-container"
       >
-        {/* TODO: handle success message */}
         {/* TODO: Handle audio and image */}
         {/* TODO: infinite scroll */}
         {/* TODO: handle react virtualization */}
-        {/* TODO-important: handle maksimum using the conversation */}
         {/* TODO-important: handle responsive */}
         <div className="flex flex-col gap-12 items-start w-[65%]">
           {detailConversation?.history.map((message, index) => {

@@ -1,4 +1,5 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
+
 import SidebarAIThread from '../../components/SidebarAIThread';
 import InputPrompt from '../../components/InputPrompt';
 import { twJoin } from 'tailwind-merge';
@@ -9,20 +10,39 @@ import { useGetStatsUsageQuery } from '../../api/@query/use-get-stats-usage';
 import { useUser } from '@clerk/clerk-react';
 import Cookies from 'js-cookie';
 import { COOKIE_X_GUEST_ID } from '../../const/cookies';
+import { USER_THREADS_24_HOURS_LIMIT, GUEST_THREADS_24_HOURS_LIMIT } from '../../const/limit';
+import LimitModal from '../../components/LimitModal';
+import { ROUTE_SIGN_IN } from '../../const/routes';
+
 
 const AIThreadContainer: React.FC = () => {
+  const navigate = useNavigate();
   const { isIncognito } = useDetectIncognito();
 
-  const { user } = useUser();
-  const userId = user?.id || Cookies.get(COOKIE_X_GUEST_ID) || '';
+  const { user, isLoaded } = useUser();
+  const userId = isLoaded ? (user?.id || Cookies.get(COOKIE_X_GUEST_ID) || '') : '';
+  const limit = user ? USER_THREADS_24_HOURS_LIMIT : GUEST_THREADS_24_HOURS_LIMIT;
+
+  const { data } = useGetStatsUsageQuery(userId, !!userId);
+  const current24hUsage = data?.current24HUsage || 0;
+  const lastActive = data?.lastActive || '';
 
   useZombieCookie();
-  useGetStatsUsageQuery(userId, !!userId);
 
   if (isIncognito) {
     return (
       <IncognitoModal />
     )
+  }
+
+  if (isLoaded && current24hUsage >= limit) {
+    return (
+      <LimitModal
+        lastActive={lastActive}
+        isGuest={!user}
+        onSignIn={() => navigate(ROUTE_SIGN_IN)}
+      />
+    );
   }
 
   return (

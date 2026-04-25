@@ -1,24 +1,22 @@
 # Stage 1: Build
 FROM node:22-alpine AS builder
 
+# Install pnpm
+RUN npm install -g pnpm
+
 WORKDIR /app
 
-# Copy root package.json and lockfile
-COPY package.json package-lock.json ./
-# Copy workspace config
-COPY lerna.json ./
+# Copy root configurations
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml lerna.json ./
 
-# Copy ai-thread package.json specifically to leverage Docker layer caching
-COPY apps/ai-thread/package.json ./apps/ai-thread/
+# Copy all apps to handle potential workspace dependencies
+COPY apps/ ./apps/
 
-# Install dependencies
-RUN npm ci
-
-# Copy the rest of the application code
-COPY apps/ai-thread/ ./apps/ai-thread/
+# Install dependencies for the entire monorepo
+RUN pnpm install --frozen-lockfile
 
 # Build the specific workspace
-RUN npm run build --workspace=@app/ai-thread
+RUN pnpm run build --filter @app/ai-thread
 
 # Stage 2: Serve via Nginx
 FROM nginx:alpine
@@ -26,6 +24,19 @@ FROM nginx:alpine
 # The base path is /app/ai-thread/ so we nest the built assets there
 RUN mkdir -p /usr/share/nginx/html/app/ai-thread
 COPY --from=builder /app/apps/ai-thread/dist /usr/share/nginx/html/app/ai-thread
+
+# Copy a basic nginx config that handles SPA routing
+RUN printf "server {\n\
+    listen 80;\n\
+    location /app/ai-thread/ {\n\
+        root /usr/share/nginx/html;\n\
+        index index.html;\n\
+        try_files \$uri \$uri/ /app/ai-thread/index.html;\n\
+    }\n\
+    location / {\n\
+        return 301 /app/ai-thread/;\n\
+    }\n\
+}" > /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

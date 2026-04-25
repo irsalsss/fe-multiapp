@@ -35,13 +35,13 @@ RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Create directories for each app
-RUN mkdir -p /usr/share/nginx/html/ai-thread
-RUN mkdir -p /usr/share/nginx/html/dashboard
+RUN mkdir -p /usr/share/nginx/html/app/ai-thread
+RUN mkdir -p /usr/share/nginx/html/app/dashboard
 
 # Copy build artifacts from builder stage
 # Assuming vite output is in 'dist' folder of each app
-COPY --from=builder /app/apps/ai-thread/dist /usr/share/nginx/html/ai-thread
-COPY --from=builder /app/apps/dashboard/dist /usr/share/nginx/html/dashboard
+COPY --from=builder /app/apps/ai-thread/dist /usr/share/nginx/html/app/ai-thread
+COPY --from=builder /app/apps/dashboard/dist /usr/share/nginx/html/app/dashboard
 
 EXPOSE 80
 

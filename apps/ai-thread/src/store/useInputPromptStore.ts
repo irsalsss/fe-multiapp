@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 
-interface InputPromptStore {
+interface UseInputPromptStore {
   focusTrigger: number;
   triggerFocus: () => void;
 }
 
-export const useInputPromptStore = create<InputPromptStore>((set) => ({
+export const useInputPromptStore = create<UseInputPromptStore>((set) => ({
   focusTrigger: 0,
   triggerFocus: () => set((state) => ({ focusTrigger: state.focusTrigger + 1 })),
 }));

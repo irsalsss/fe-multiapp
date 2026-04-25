@@ -8,7 +8,7 @@ if (!rootElement) throw new Error('Failed to find the root element')
 
 createRoot(rootElement).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <App />
     </BrowserRouter>
   </StrictMode>,

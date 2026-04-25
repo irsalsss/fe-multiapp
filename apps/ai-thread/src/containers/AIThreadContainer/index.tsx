@@ -2,8 +2,18 @@ import { Outlet } from 'react-router-dom';
 import SidebarAIThread from '../../components/SidebarAIThread';
 import InputPrompt from '../../components/InputPrompt';
 import { twJoin } from 'tailwind-merge';
+import useDetectIncognito from '../../hooks/useDetectIncognito';
+import IncognitoModal from '../../components/IncognitoModal';
 
 const AIThreadContainer: React.FC = () => {
+  const { isIncognito } = useDetectIncognito();
+
+  if (isIncognito) {
+    return (
+      <IncognitoModal />
+    )
+  }
+
   return (
     <div className="flex h-screen">
       <SidebarAIThread />

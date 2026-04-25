@@ -1,4 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
+import Cookies from 'js-cookie';
+import { COOKIE_X_GUEST_ID } from '../const/cookies';
 
 export class CustomError extends Error {
   statusCode: number;
@@ -34,6 +36,7 @@ export const fetchJson = async <JSONDataType = unknown>(
   headers.set('Content-Type', 'application/json');
   headers.set('Accept', 'application/json');
   headers.set('X-Request-ID', uuidv4());
+  headers.set(COOKIE_X_GUEST_ID, Cookies.get(COOKIE_X_GUEST_ID) || '');
 
   // Add authorization header if Clerk session token exists in cookies
   const clerkSession = document.cookie

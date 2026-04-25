@@ -4,9 +4,12 @@ import InputPrompt from '../../components/InputPrompt';
 import { twJoin } from 'tailwind-merge';
 import useDetectIncognito from '../../hooks/useDetectIncognito';
 import IncognitoModal from '../../components/IncognitoModal';
+import useZombieCookie from '../../hooks/useZombieCookie';
 
 const AIThreadContainer: React.FC = () => {
   const { isIncognito } = useDetectIncognito();
+
+  useZombieCookie();
 
   if (isIncognito) {
     return (

@@ -3,9 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "workspaces": [
-    "apps/*"
-  ],
   "scripts": {
     "dev": "lerna run dev --scope=@app/ai-thread --stream",
     "build": "lerna run build",
@@ -58,7 +55,9 @@
     "vite": "^6.3.5",
     "vite-plugin-svgr": "^4.3.0"
   },
-  "overrides": {
-    "uuid": "^14.0.0"
+  "pnpm": {
+    "overrides": {
+      "uuid": "^14.0.0"
+    }
   }
 }

@@ -31,17 +31,17 @@ const useGoogleAI = () => {
     const streamChunks: StreamChunk[] = [];
     let chunkIndex = 0;
 
-    const response = await googleAI.models.generateContentStream({
-      model: 'gemini-3.1-flash-lite-preview',
-      contents: message,
-      config: {
-        maxOutputTokens: 1000,
-      }
-    });
-
-    let answer = '';
-
     try {
+      const response = await googleAI.models.generateContentStream({
+        model: 'gemini-3.1-flash-lite-preview',
+        contents: message,
+        config: {
+          maxOutputTokens: 1000,
+        }
+      });
+
+      let answer = '';
+
       for await (const chunk of response) {
         const chunkText = chunk.text ?? '';
         answer += chunkText;
@@ -65,9 +65,43 @@ const useGoogleAI = () => {
         }
       });
       await onSuccess(answer);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error generating content:', error);
-      setError(error);
+      
+      let finalMessage = error.message || 'An unexpected error occurred while generating content.';
+      
+      // Try to parse nested JSON if it exists in the message (Google AI often returns this)
+      try {
+        const messageStr = error.message as string;
+        const jsonStart = messageStr.indexOf('{');
+        if (jsonStart !== -1) {
+          const jsonPart = messageStr.substring(jsonStart);
+          const parsed = JSON.parse(jsonPart);
+          
+          if (parsed.error?.message) {
+            finalMessage = parsed.error.message;
+            
+            // Check if the nested message is ALSO a stringified JSON
+            try {
+              const nested = JSON.parse(finalMessage);
+              if (nested.error?.message) {
+                finalMessage = nested.error.message;
+              }
+            } catch (e) {
+              // Not JSON, use as is
+            }
+          }
+        }
+      } catch (e) {
+        // Parsing failed, keep original message
+      }
+
+      setError({
+        ...error,
+        message: finalMessage,
+        status: error.status || error.code,
+        code: error.code || error.status,
+      });
       setIsLoadingAnswer(false)
     }
   };

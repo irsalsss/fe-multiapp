@@ -23,7 +23,7 @@ const IncognitoModal: React.FC = () => {
           </h2>
           
           <p className="mb-10 text-balance text-lg text-gray-300 leading-relaxed">
-            This application is currently not supported for incognito mode. To ensure your sessions and AI threads are properly synchronized, please use a standard browsing window.
+            This application is currently not supported for incognito mode. Since this application is built for portfolio purposes only, please use a standard browsing window to ensure your sessions and AI threads are properly synchronized.
           </p>
 
           <div className="h-px w-3/4 bg-gradient-to-r from-transparent via-white/20 to-transparent mb-10" />

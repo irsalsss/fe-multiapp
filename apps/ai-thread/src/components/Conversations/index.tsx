@@ -8,7 +8,11 @@ import ThreadSpinner from '../ThreadSpinner';
 import { EnumSpinnerType } from '../ThreadSpinner/types';
 import { twMerge } from 'tailwind-merge';
 
-const Conversations = () => {
+interface ConversationsProps {
+  isCollapsed?: boolean;
+}
+
+const Conversations = ({ isCollapsed }: ConversationsProps) => {
   const { data, isLoading: isLoadingGetConversations } =
     useGetConversationsQuery();
   const params = useParams();
@@ -49,7 +53,10 @@ const Conversations = () => {
   return (
     <div
       data-testid="conversations-container"
-      className="flex flex-col gap-[10px] px-4 pb-4 relative"
+      className={twMerge(
+        "flex flex-col gap-[10px] pb-4 relative",
+        isCollapsed ? "px-0" : "px-4"
+      )}
     >
       {!isLoadingGetConversations &&
         sortedConversations.map((item) => (
@@ -61,6 +68,7 @@ const Conversations = () => {
             conversationId={item.id}
             isActive={isActiveConversation(item.id)}
             isSaved={item.isSaved}
+            isCollapsed={isCollapsed}
           />
         ))}
 

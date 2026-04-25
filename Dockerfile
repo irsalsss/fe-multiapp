@@ -19,6 +19,20 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml lerna.json ./
 # Copy all apps to handle dependencies
 COPY apps/ ./apps/
 
+# Define build arguments for Vite (Railway will pass these from the Variables tab)
+ARG VITE_API_URL
+ARG VITE_CLERK_PUBLISHABLE_KEY
+ARG VITE_GEMINI_PUBLIC_KEY
+ARG VITE_IMAGE_KIT_ENDPOINT
+ARG VITE_IMAGE_KIT_PUBLIC_KEY
+
+# Set them as environment variables so Vite can pick them up during 'pnpm run build'
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_CLERK_PUBLISHABLE_KEY=$VITE_CLERK_PUBLISHABLE_KEY
+ENV VITE_GEMINI_PUBLIC_KEY=$VITE_GEMINI_PUBLIC_KEY
+ENV VITE_IMAGE_KIT_ENDPOINT=$VITE_IMAGE_KIT_ENDPOINT
+ENV VITE_IMAGE_KIT_PUBLIC_KEY=$VITE_IMAGE_KIT_PUBLIC_KEY
+
 # Install dependencies for the entire monorepo
 RUN pnpm install --frozen-lockfile
 

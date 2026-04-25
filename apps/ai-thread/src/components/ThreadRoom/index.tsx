@@ -68,7 +68,6 @@ const ThreadRoom = () => {
       >
         {/* TODO: handle success message */}
         {/* TODO: Handle audio and image */}
-        {/* TODO: logout */}
         {/* TODO: infinite scroll */}
         {/* TODO: handle react virtualization */}
         {/* TODO-important: handle maksimum using the conversation */}

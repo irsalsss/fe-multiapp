@@ -8,19 +8,22 @@ RUN apt-get update && apt-get install -y \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
+# Install pnpm
+RUN npm install -g pnpm
+
 WORKDIR /app
 
 # Copy root configurations
-COPY package.json package-lock.json lerna.json ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml lerna.json ./
 
 # Copy all apps to handle dependencies
 COPY apps/ ./apps/
 
 # Install dependencies for the entire monorepo
-RUN npm ci
+RUN pnpm install --frozen-lockfile
 
 # Build all applications using Lerna
-RUN npm run build
+RUN pnpm run build
 
 # Stage 2: Serve via Nginx
 FROM nginx:alpine

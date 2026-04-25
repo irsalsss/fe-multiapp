@@ -49,7 +49,7 @@ const InputPrompt = () => {
   const { mutateAsync: initiateThread } = useSendThread();
   const { mutateAsync: updateThread } = useUpdateThread();
   const { sendGoogleAIMessage } = useGoogleAI();
-  const { data: threadData } = useGetThreadQuery(conversationId, false);
+  const { data: threadData } = useGetThreadQuery(conversationId, { enabled: false });
 
   const threadHistory = useMemo(() => {
     return threadData?.history ?? [];

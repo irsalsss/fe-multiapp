@@ -1,6 +1,6 @@
 import AnswerBubble from '../AnswerBubble';
 import QuestionBubble from '../QuestionBubble';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { twJoin } from 'tailwind-merge';
 import { useGetThreadQuery } from '../../api/@query/use-get-thread';
 import { useEffect, useMemo, useRef } from 'react';
@@ -15,6 +15,7 @@ import AnswerError from '../AnswerError';
 import { useUser } from '@clerk/clerk-react';
 
 const ThreadRoom = () => {
+  const navigate = useNavigate();
   const { user } = useUser();
   const isGuest = !user;
 
@@ -31,7 +32,11 @@ const ThreadRoom = () => {
   const params = useParams();
   const conversationId = params.conversationId ?? ('' as string);
 
-  const { data: detailConversation } = useGetThreadQuery(conversationId);
+  const { data: detailConversation } = useGetThreadQuery(conversationId, {
+    onError: () => {
+      navigate('/app/ai-thread');
+    },
+  });
 
   const title = useMemo(() => {
     return detailConversation?.history[0]?.parts[0]?.text;
@@ -67,6 +72,7 @@ const ThreadRoom = () => {
         {/* TODO: infinite scroll */}
         {/* TODO: handle react virtualization */}
         {/* TODO-important: handle maksimum using the conversation */}
+        {/* TODO-important: handle responsive */}
         <div className="flex flex-col gap-12 items-start w-[65%]">
           {detailConversation?.history.map((message, index) => {
             if (message.role === UserRoleEnum.USER) {

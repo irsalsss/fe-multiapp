@@ -16,7 +16,7 @@ interface Message {
   };
 }
 
-interface AIStore {
+interface UseSendAIMessageStore {
   answer: string;
   setAnswer: (newAnswer: string) => void;
 
@@ -33,7 +33,7 @@ interface AIStore {
   setError: (error: any | null) => void;
 }
 
-const useSendAIMessageStore = create<AIStore>((set) => ({
+const useSendAIMessageStore = create<UseSendAIMessageStore>((set) => ({
   answer: '',
   setAnswer: (newAnswer) => { set({ answer: newAnswer }); },
 

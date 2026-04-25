@@ -61,6 +61,7 @@ const ThreadRoom = () => {
         {/* TODO: logout */}
         {/* TODO: infinite scroll */}
         {/* TODO: handle react virtualization */}
+        {/* TODO-important: handle maksimum using the conversation */}
         <div className="flex flex-col gap-12 items-start w-[65%]">
           {detailConversation?.history.map((message, index) => {
             if (message.role === UserRoleEnum.USER) {

@@ -23,9 +23,9 @@ RUN npm run build --workspace=@app/ai-thread
 # Stage 2: Serve via Nginx
 FROM nginx:alpine
 
-# The base path is /ai-thread/ so we nest the built assets there
-RUN mkdir -p /usr/share/nginx/html/ai-thread
-COPY --from=builder /app/apps/ai-thread/dist /usr/share/nginx/html/ai-thread
+# The base path is /app/ai-thread/ so we nest the built assets there
+RUN mkdir -p /usr/share/nginx/html/app/ai-thread
+COPY --from=builder /app/apps/ai-thread/dist /usr/share/nginx/html/app/ai-thread
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

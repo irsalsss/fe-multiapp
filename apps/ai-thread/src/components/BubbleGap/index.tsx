@@ -7,7 +7,7 @@ interface BubbleGapProps {
 
 const BubbleGap = ({ conversationId }: BubbleGapProps) => {
   const [gap, setGap] = useState(40);
-  const { data: thread } = useGetThreadQuery(conversationId, false);
+  const { data: thread } = useGetThreadQuery(conversationId, { enabled: false });
 
   const threadHistory = useMemo(() => {
     return thread?.history ?? [];

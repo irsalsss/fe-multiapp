@@ -2,16 +2,29 @@ import { QueryClient, useQuery } from "@tanstack/react-query";
 import { getThread } from "../../get-thread";
 import type { Thread, ThreadMessage } from "../../../types/thread.interface";
 
+import { useEffect } from "react";
+
 type GetThreadData = Thread;
 
 export const QUERY_KEY_THREAD = "useGetThreadQuery";
 
-export const useGetThreadQuery = (conversationId: string, enabled = true) => {
-  return useQuery({
+export const useGetThreadQuery = (
+  conversationId: string,
+  options?: { enabled?: boolean; onError?: (error: any) => void }
+) => {
+  const query = useQuery({
     queryKey: [QUERY_KEY_THREAD, conversationId],
     queryFn: () => getThread(conversationId),
-    enabled,
+    enabled: options?.enabled ?? true,
   });
+
+  useEffect(() => {
+    if (query.isError && options?.onError) {
+      options.onError(query.error);
+    }
+  }, [query.isError, query.error, options?.onError]);
+
+  return query;
 };
 
 export const setUpdateAnswerThreadQueryData = (queryClient: QueryClient, conversationId: string, lastThread: ThreadMessage) => {

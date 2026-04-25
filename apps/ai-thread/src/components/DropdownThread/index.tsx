@@ -37,7 +37,7 @@ const DropdownThread = () => {
   const { mutate: unsaveConversation } = useUnsaveConversation();
   const { data: detailConversation } = useGetThreadQuery(
     conversationId ?? '',
-    false
+    { enabled: false }
   );
 
   const isSaved = detailConversation?.isSaved;

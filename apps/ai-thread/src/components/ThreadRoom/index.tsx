@@ -11,8 +11,13 @@ import { UserRoleEnum } from '../../types/user-role.enum';
 import { EnumSpinnerType } from '../ThreadSpinner/types';
 import ThreadSpinner from '../ThreadSpinner';
 import BubbleGap from '../BubbleGap';
+import AnswerError from '../AnswerError';
+import { useUser } from '@clerk/clerk-react';
 
 const ThreadRoom = () => {
+  const { user } = useUser();
+  const isGuest = !user;
+
   const { answer: answerAI, isLoadingAnswer, error } = useSendAIMessageStore(
     useShallow((state) => ({
       answer: state.answer,
@@ -71,6 +76,7 @@ const ThreadRoom = () => {
                   key={message.id}
                   message={message.parts[0].text}
                   index={index + 1}
+                  isGuest={isGuest}
                 />
               );
             }
@@ -99,9 +105,7 @@ const ThreadRoom = () => {
           )}
 
           {!isLoadingAnswer && !!error && (
-            <div className='mt-4'>
-              <p className='text-red-500'>{error.message}</p>
-            </div>
+            <AnswerError error={error} />
           )}
 
           {/* TODO: fix here */}

@@ -1,7 +1,6 @@
 import { twJoin, twMerge } from 'tailwind-merge';
 import ThreadGPTIcon from '../../../assets/icons/thread-gpt-white.svg?react';
 import { Link } from 'react-router-dom';
-import { ROUTE_AI_THREAD } from '../../../const/routes';
 import { formatRelativeDate } from '../../../utils/date/date';
 import { DrawingPinFilledIcon } from '@radix-ui/react-icons';
 

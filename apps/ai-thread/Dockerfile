@@ -28,13 +28,13 @@ COPY --from=builder /app/apps/ai-thread/dist /usr/share/nginx/html/app/ai-thread
 # Copy a basic nginx config that handles SPA routing
 RUN printf "server {\n\
     listen 80;\n\
-    location /app/ai-thread/ {\n\
+    location /app/ai-thread {\n\
         root /usr/share/nginx/html;\n\
         index index.html;\n\
-        try_files \$uri \$uri/ /app/ai-thread/index.html;\n\
+        try_files \$uri /app/ai-thread/index.html;\n\
     }\n\
     location / {\n\
-        return 301 /app/ai-thread/;\n\
+        return 301 /app/ai-thread;\n\
     }\n\
 }" > /etc/nginx/conf.d/default.conf
 

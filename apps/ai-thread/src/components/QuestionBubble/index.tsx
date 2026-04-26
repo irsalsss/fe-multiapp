@@ -30,11 +30,11 @@ const QuestionBubble: React.FC<QuestionBubbleProps> = ({
         <span className="text-[12px] leading-[16px] font-semibold">
           {isGuest ? 'Guest' : 'You'}
         </span>
-        <span className="text-[8px] leading-[8px] text-gray-200 opacity-60">
+        <span className="text-[8px] md:text-[10px] leading-[8px] md:leading-[12px] text-gray-200 opacity-60">
           {formatTimeAgo(date)}
         </span>
       </div>
-      <p className="text-[12px] leading-[16px] font-normal">{message}</p>
+      <p className="text-[12px] md:text-[15px] leading-[16px] md:leading-[22px] font-normal">{message}</p>
     </div>
   );
 };

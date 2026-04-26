@@ -68,16 +68,16 @@ const ConversationsItems = ({
 
         <h5
           className={twJoin(
-            'text-[14px] font-semibold text-white capitalize',
+            'text-[14px] md:text-[16px] font-semibold text-white capitalize',
             'truncate max-w-[90%]'
           )}
         >
           {title}
         </h5>
-        <p className="text-[12px] text-gray-200 line-clamp-2">{description}</p>
+        <p className="text-[12px] md:text-[14px] text-gray-200 line-clamp-2">{description}</p>
         <p
           className={twMerge(
-            'text-[10px] leading-[8px] text-gray-200 opacity-60',
+            'text-[10px] md:text-[11px] leading-[8px] md:leading-[12px] text-gray-200 opacity-60',
             'absolute top-[16px] right-0',
             isActive && 'right-[8px]',
             'group-hover:right-[8px]'

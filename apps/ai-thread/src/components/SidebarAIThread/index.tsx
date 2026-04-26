@@ -144,7 +144,7 @@ const SidebarAIThread = () => {
                   )}
                 >
                   <ExitIcon className="w-4 h-4" />
-                  <span>Logout</span>
+                  <span className="text-sm md:text-[15px]">Logout</span>
                 </button>
               ) : (
                 <Link
@@ -157,7 +157,7 @@ const SidebarAIThread = () => {
                   )}
                 >
                   <EnterIcon className="w-4 h-4" />
-                  <span>Sign In</span>
+                  <span className="text-sm md:text-[15px]">Sign In</span>
                 </Link>
               )}
             </div>
@@ -184,7 +184,7 @@ const SidebarAIThread = () => {
 
         <div className={twJoin("p-4 pb-0 sticky top-0 bg-gray-600 z-10 pb-4", isCollapsed && "items-center")}>
           <div className={twJoin("flex items-center", isCollapsed ? "justify-center" : "justify-between")}>
-            {!isCollapsed && <h2 className="text-[20px] font-bold text-white truncate">My Chats</h2>}
+            {!isCollapsed && <h2 className="text-[20px] md:text-[22px] font-bold text-white truncate">My Chats</h2>}
 
             <div className="flex items-center gap-[10px]">
               <Link to={ROUTE_AI_THREAD} onClick={triggerFocus}>
@@ -232,7 +232,7 @@ const SidebarAIThread = () => {
               title={isCollapsed ? "Logout" : ""}
             >
               <ExitIcon className={twJoin("w-4 h-4", isCollapsed && "w-6 h-6")} />
-              {!isCollapsed && <span>Logout</span>}
+              {!isCollapsed && <span className="text-sm md:text-[15px]">Logout</span>}
             </button>
           ) : (
             <Link
@@ -246,7 +246,7 @@ const SidebarAIThread = () => {
               title={isCollapsed ? "Sign In" : ""}
             >
               <EnterIcon className={twJoin("w-4 h-4", isCollapsed && "w-6 h-6")} />
-              {!isCollapsed && <span>Sign In</span>}
+              {!isCollapsed && <span className="text-sm md:text-[15px]">Sign In</span>}
             </Link>
           )}
         </div>

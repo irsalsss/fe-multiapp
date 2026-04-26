@@ -165,14 +165,13 @@ const SidebarAIThread = () => {
         </div>
       )}
 
-      {/* Desktop Sidebar */}
-      <div 
+      <div
+        data-testid="sidebar-ai-thread"
         className={twJoin(
           "hidden md:flex flex-col h-full bg-gray-600 border-r border-gray-500 transition-all duration-300 ease-in-out relative",
-          isCollapsed ? "w-[80px]" : "w-[320px]"
+          isCollapsed ? "w-[80px]" : "min-w-[320px] w-[320px]"
         )}
       >
-        {/* Collapse Toggle Button */}
         <button
           onClick={toggleSidebar}
           className={twJoin(
@@ -205,10 +204,11 @@ const SidebarAIThread = () => {
               <TabThreadHistory
                 key={item.value}
                 active={item.value === activeSidebar}
-                title={isCollapsed ? "" : item.title}
+                title={item.title}
                 icon={item.icon}
                 onClick={handleChangeSidebar(item.value)}
-                total={isCollapsed ? undefined : totalTab[index]}
+                total={totalTab[index]}
+                isSidebarCollapsed={isCollapsed}
                 className={isCollapsed ? "p-2 justify-center" : ""}
               />
             ))}

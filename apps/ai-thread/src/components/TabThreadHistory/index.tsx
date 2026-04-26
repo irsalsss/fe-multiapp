@@ -7,6 +7,7 @@ interface TabThreadHistoryProps {
   onClick?: VoidFunction;
   active?: boolean;
   className?: string;
+  isSidebarCollapsed?: boolean;
 }
 
 const TabThreadHistory = ({
@@ -16,6 +17,7 @@ const TabThreadHistory = ({
   onClick,
   active,
   className,
+  isSidebarCollapsed,
 }: TabThreadHistoryProps) => {
   const activeClass = active
     ? 'bg-gray-700 text-green-100'
@@ -35,7 +37,7 @@ const TabThreadHistory = ({
       )}
     >
       {icon}
-      {title && (
+      {!isSidebarCollapsed && (
         <span
           className={twJoin(
             'text-[10px] leading-[8px] font-semibold',
@@ -45,7 +47,7 @@ const TabThreadHistory = ({
           {title}
         </span>
       )}
-      {typeof total === 'number' && (
+      {!isSidebarCollapsed && (
         <span
           className={twMerge(
             'py-[2px] font-semibold rounded-[4px]',
@@ -53,7 +55,7 @@ const TabThreadHistory = ({
             activeTotalClass
           )}
         >
-          {total}
+          {total || 0}
         </span>
       )}
     </div>

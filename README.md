@@ -49,7 +49,7 @@ Once running, the Nginx Gateway will route traffic seamlessly. You can access th
 - **State Management:** TanStack React Query (Server), Zustand (Client)
 - **Routing:** React Router DOM
 - **Authentication:** Clerk
-- **AI Integration:** Google GenAI
+- **AI Integration:** Google Gemini API (via backend)
 - **Testing:** Jest
 
 ## Design Inspiration

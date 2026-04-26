@@ -6,7 +6,7 @@ A unified frontend monorepo architecture managing multiple React/Vite applicatio
 
 This repository uses **npm workspaces** and **Lerna** to manage multiple frontend applications and shared packages.
 
-- `apps/ai-thread/` - The AI-powered chat application.
+- `apps/ai-thread/` - The AI-powered chat application ([Live Demo](https://i-faaza.com)).
 - `apps/dashboard/` - (Coming soon) The central dashboard.
 - `packages/ui-kit/` - (Coming soon) Shared Tailwind UI components.
 - `packages/core/` - (Coming soon) Shared hooks, Zustand stores, and API services.
@@ -39,7 +39,8 @@ docker compose up --build
 ```
 
 Once running, the Nginx Gateway will route traffic seamlessly. You can access the applications locally at:
-- **AI Thread:** `http://localhost:8080/app/ai-thread/`
+- **AI Thread (Local):** `http://localhost:5173/app/ai-thread`
+- **AI Thread (Live):** [https://i-faaza.com](https://i-faaza.com)
 
 ## Core Tech Stack
 

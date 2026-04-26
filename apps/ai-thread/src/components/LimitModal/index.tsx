@@ -1,14 +1,15 @@
 import React, { useState, useEffect, memo } from 'react';
-import { PersonIcon, TimerIcon } from '@radix-ui/react-icons';
+import { PersonIcon, TimerIcon, ExitIcon } from '@radix-ui/react-icons';
 import { intervalToDuration, addHours, isAfter } from 'date-fns';
 
 interface LimitModalProps {
   lastActive?: string;
   isGuest?: boolean;
   onSignIn?: () => void;
+  onSignOut?: () => void;
 }
 
-const LimitModal: React.FC<LimitModalProps> = ({ lastActive, isGuest, onSignIn }) => {
+const LimitModal: React.FC<LimitModalProps> = ({ lastActive, isGuest, onSignIn, onSignOut }) => {
   const [timeLeft, setTimeLeft] = useState<string>('');
 
   useEffect(() => {
@@ -85,6 +86,16 @@ const LimitModal: React.FC<LimitModalProps> = ({ lastActive, isGuest, onSignIn }
               <div className="absolute inset-0 bg-gradient-to-r from-amber-400/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
               <PersonIcon className="h-5 w-5" />
               <span>Sign In to Continue</span>
+            </button>
+          )}
+
+          {!isGuest && (
+            <button
+              onClick={onSignOut}
+              className="group relative mt-10 flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl bg-gray-800/50 border border-white/10 px-8 py-4 text-lg font-bold text-white transition-all hover:bg-gray-800/80 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <ExitIcon className="h-5 w-5" />
+              <span>Sign Out</span>
             </button>
           )}
 

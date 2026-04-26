@@ -7,7 +7,7 @@ import useDetectIncognito from '../../hooks/useDetectIncognito';
 import IncognitoModal from '../../components/IncognitoModal';
 import useZombieCookie from '../../hooks/useZombieCookie';
 import { useGetStatsUsageQuery } from '../../api/@query/use-get-stats-usage';
-import { useUser } from '@clerk/clerk-react';
+import { useUser, useClerk } from '@clerk/clerk-react';
 import Cookies from 'js-cookie';
 import { COOKIE_X_GUEST_ID } from '../../const/cookies';
 import { USER_THREADS_24_HOURS_LIMIT, GUEST_THREADS_24_HOURS_LIMIT } from '../../const/limit';
@@ -20,6 +20,7 @@ const AIThreadContainer: React.FC = () => {
   const { isIncognito } = useDetectIncognito();
 
   const { user, isLoaded } = useUser();
+  const { signOut } = useClerk();
   const userId = isLoaded ? (user?.id || Cookies.get(COOKIE_X_GUEST_ID) || '') : '';
   const limit = user ? USER_THREADS_24_HOURS_LIMIT : GUEST_THREADS_24_HOURS_LIMIT;
 
@@ -41,6 +42,7 @@ const AIThreadContainer: React.FC = () => {
         lastActive={lastActive}
         isGuest={!user}
         onSignIn={() => navigate(ROUTE_SIGN_IN)}
+        onSignOut={() => signOut()}
       />
     );
   }

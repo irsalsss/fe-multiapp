@@ -40,7 +40,7 @@ const TabThreadHistory = ({
       {!isSidebarCollapsed && (
         <span
           className={twJoin(
-            'text-[10px] leading-[8px] font-semibold',
+            'text-[10px] md:text-[12px] leading-[8px] md:leading-[16px] font-semibold',
             'group-hover:text-green-100'
           )}
         >
@@ -51,7 +51,7 @@ const TabThreadHistory = ({
         <span
           className={twMerge(
             'py-[2px] font-semibold rounded-[4px]',
-            'text-[10px] leading-[12px] bg-gray-400 px-1',
+            'text-[10px] md:text-[12px] leading-[12px] md:leading-[16px] bg-gray-400 px-1',
             activeTotalClass
           )}
         >

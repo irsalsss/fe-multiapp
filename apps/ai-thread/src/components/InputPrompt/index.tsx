@@ -25,6 +25,8 @@ import { UserRoleEnum } from '../../types/user-role.enum';
 import { sleep } from '../../utils/sleep';
 
 import { useFocusInput } from '../../hooks/useFocusInput';
+import { useCheckLimit } from '../../hooks/useCheckLimit';
+import { useLimitStore } from '../../store/useLimitStore';
 
 const InputPrompt = () => {
   const [inputValue, setInputValue] = useState('');
@@ -32,6 +34,10 @@ const InputPrompt = () => {
 
   const params = useParams();
   const navigate = useNavigate();
+  const { isLimitReached } = useCheckLimit();
+  const { setIsShowLimitModal } = useLimitStore(useShallow((state) => ({
+    setIsShowLimitModal: state.setIsShowLimitModal,
+  })));
 
   const conversationId = params.conversationId ?? '';
 
@@ -122,6 +128,13 @@ const InputPrompt = () => {
   );
 
   const handleInitiateThread = async () => {
+    if (isLimitReached) {
+      setIsShowLimitModal(true);
+      setInputValue('');
+      inputRef?.current?.blur();
+      return;
+    }
+
     setQuestion(inputValue);
     setIsLoadingAnswer(true);
     setInputValue('');

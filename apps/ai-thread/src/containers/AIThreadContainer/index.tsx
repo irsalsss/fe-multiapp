@@ -1,3 +1,4 @@
+import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 import SidebarAIThread from '../../components/SidebarAIThread';
@@ -6,27 +7,24 @@ import { twJoin } from 'tailwind-merge';
 import useDetectIncognito from '../../hooks/useDetectIncognito';
 import IncognitoModal from '../../components/IncognitoModal';
 import useZombieCookie from '../../hooks/useZombieCookie';
-import { useGetStatsUsageQuery } from '../../api/@query/use-get-stats-usage';
-import { useUser, useClerk } from '@clerk/clerk-react';
-import Cookies from 'js-cookie';
-import { COOKIE_X_GUEST_ID } from '../../const/cookies';
-import { USER_THREADS_24_HOURS_LIMIT, GUEST_THREADS_24_HOURS_LIMIT } from '../../const/limit';
+import { useClerk } from '@clerk/clerk-react';
 import LimitModal from '../../components/LimitModal';
 import { ROUTE_SIGN_IN } from '../../const/routes';
+import { useCheckLimit } from '../../hooks/useCheckLimit';
+import { useLimitStore } from '../../store/useLimitStore';
+import { useShallow } from 'zustand/shallow';
 
 
 const AIThreadContainer: React.FC = () => {
   const navigate = useNavigate();
   const { isIncognito } = useDetectIncognito();
-
-  const { user, isLoaded } = useUser();
   const { signOut } = useClerk();
-  const userId = isLoaded ? (user?.id || Cookies.get(COOKIE_X_GUEST_ID) || '') : '';
-  const limit = user ? USER_THREADS_24_HOURS_LIMIT : GUEST_THREADS_24_HOURS_LIMIT;
-
-  const { data } = useGetStatsUsageQuery(userId, !!userId);
-  const current24hUsage = data?.current24HUsage || 0;
-  const lastActive = data?.lastActive || '';
+  
+  const { lastActive, isGuest } = useCheckLimit();
+  const { isShowLimitModal, setIsShowLimitModal } = useLimitStore(useShallow((state) => ({
+    isShowLimitModal: state.isShowLimitModal,
+    setIsShowLimitModal: state.setIsShowLimitModal,
+  })));
 
   useZombieCookie();
 
@@ -34,17 +32,6 @@ const AIThreadContainer: React.FC = () => {
     return (
       <IncognitoModal />
     )
-  }
-
-  if (isLoaded && current24hUsage >= limit) {
-    return (
-      <LimitModal
-        lastActive={lastActive}
-        isGuest={!user}
-        onSignIn={() => navigate(ROUTE_SIGN_IN)}
-        onSignOut={() => signOut()}
-      />
-    );
   }
 
   return (
@@ -59,6 +46,16 @@ const AIThreadContainer: React.FC = () => {
         )}
       >
         <Outlet />
+
+        {isShowLimitModal && (
+          <LimitModal
+            lastActive={lastActive}
+            isGuest={isGuest}
+            onSignIn={() => navigate(ROUTE_SIGN_IN)}
+            onSignOut={() => signOut()}
+            onClose={() => setIsShowLimitModal(false)}
+          />
+        )}
 
         <div
           className={twJoin(

@@ -76,7 +76,7 @@ const ThreadRoom = () => {
                 <QuestionBubble
                   date={message.createdAt}
                   key={message.id}
-                  message={message.parts[0].text}
+                  message={message?.parts?.[0]?.text}
                   index={index + 1}
                   isGuest={isGuest}
                 />
@@ -87,7 +87,7 @@ const ThreadRoom = () => {
               <AnswerBubble
                 date={message.createdAt}
                 key={message.id}
-                answer={message.parts[0].text}
+                answer={message?.parts?.[0]?.text}
                 index={index + 1}
               />
             );

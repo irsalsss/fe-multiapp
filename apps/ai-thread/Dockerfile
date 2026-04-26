@@ -28,9 +28,9 @@ COPY --from=builder /app/apps/ai-thread/dist /usr/share/nginx/html/app/ai-thread
 # Copy a basic nginx config that handles SPA routing
 RUN printf "server {\n\
     listen 80;\n\
+    absolute_redirect off;\n\
     location /app/ai-thread {\n\
         root /usr/share/nginx/html;\n\
-        index index.html;\n\
         try_files \$uri /app/ai-thread/index.html;\n\
     }\n\
     location / {\n\

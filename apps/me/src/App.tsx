@@ -87,11 +87,20 @@ function App() {
               </div>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed font-mono">
-              An advanced AI-powered conversation interface. Built with modern web technologies to provide a seamless, real-time messaging experience with intelligent agents.
+              An AI-powered conversation interface. Built with modern web technologies to provide a seamless, real-time messaging experience.
             </p>
-            <div className="flex gap-4 text-xs uppercase tracking-widest font-bold text-emerald-500">
-              <StarIcon />
-              <span>Featured</span>
+            <div className="flex flex-wrap gap-2">
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">React 19</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Typescript</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">TanStack Query</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Zustand</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Vite</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Lerna</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Express</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Redis</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Clerk</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">MongoDB</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Docker</span>
             </div>
           </div>
 
@@ -109,11 +118,18 @@ function App() {
               </div>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed font-mono">
-              A comprehensive digital brain and note-taking application focused on friction-less writing and fast retrieval.
+              A minimalist note-taking web app optimized for fast writing and efficient retrieval.
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Next.js</span>
-              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">TS</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Turborepo</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Typescript</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">TanStack Query</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Zustand</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">NestJS</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Prisma</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">PostgreSQL</span>
+              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Docker</span>
             </div>
           </div>
         </div>

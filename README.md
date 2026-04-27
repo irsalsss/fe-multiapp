@@ -46,9 +46,12 @@ Once running, the Nginx Gateway will route traffic seamlessly. You can access th
 - **AI Thread (Local):** `http://localhost:5173/app/ai-thread`
 - **AI Thread (Live):** [https://i-faaza.com/app/ai-thread](https://i-faaza.com/app/ai-thread)
 
+- **Me (Local):** `http://localhost:5173/app/me`
+- **Me (Live):** [https://i-faaza.com/app/me](https://i-faaza.com/app/me)
+
 ## Core Tech Stack
 
-- **Infrastructure:** Lerna, npm Workspaces, Docker, Nginx
+- **Infrastructure:** Lerna, Docker, Nginx
 - **Framework:** React 19, TypeScript, Vite
 - **Styling:** TailwindCSS v4
 - **State Management:** TanStack React Query (Server), Zustand (Client)

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { 
-  StarIcon,
   GitHubLogoIcon,
   ExternalLinkIcon,
 } from '@radix-ui/react-icons';

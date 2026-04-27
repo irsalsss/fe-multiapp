@@ -128,7 +128,6 @@ function App() {
               <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">NestJS</span>
               <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Prisma</span>
               <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">PostgreSQL</span>
-              <span className="text-[11px] px-1.5 py-0.5 border border-gray-800 text-gray-500 uppercase font-bold tracking-tighter">Docker</span>
             </div>
           </div>
         </div>

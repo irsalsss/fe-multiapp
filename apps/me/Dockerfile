@@ -16,7 +16,7 @@ COPY apps/ ./apps/
 RUN pnpm install --frozen-lockfile
 
 # Build the specific workspace
-RUN pnpm run build --filter @app/me
+RUN pnpm --filter @app/me build
 
 # Stage 2: Serve via Nginx
 FROM nginx:alpine

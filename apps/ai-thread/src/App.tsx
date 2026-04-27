@@ -28,7 +28,10 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+      <ClerkProvider 
+        publishableKey={PUBLISHABLE_KEY}
+        afterSignOutUrl={window.location.origin + import.meta.env.BASE_URL}
+      >
         <Routes>
           {/* Authenticated Routes */}
           <Route element={<AuthenticatedLayout />}>

@@ -134,7 +134,7 @@ const SidebarAIThread = () => {
               {user ? (
                 <button
                   onClick={() => {
-                    signOut();
+                    signOut({ redirectUrl: window.location.origin + import.meta.env.BASE_URL });
                     setIsMobileMenuOpen(false);
                   }}
                   className={twJoin(
@@ -222,7 +222,7 @@ const SidebarAIThread = () => {
         <div className="p-4 border-t border-gray-500">
           {user ? (
             <button
-              onClick={() => signOut()}
+              onClick={() => signOut({ redirectUrl: window.location.origin + import.meta.env.BASE_URL })}
               className={twJoin(
                 'flex items-center gap-2 w-full p-2 rounded-lg',
                 'text-white hover:bg-gray-500 transition-colors duration-200',

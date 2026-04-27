@@ -52,7 +52,7 @@ const AIThreadContainer: React.FC = () => {
             lastActive={lastActive}
             isGuest={isGuest}
             onSignIn={() => navigate(ROUTE_SIGN_IN)}
-            onSignOut={() => signOut()}
+            onSignOut={() => signOut({ redirectUrl: window.location.origin + import.meta.env.BASE_URL })}
             onClose={() => setIsShowLimitModal(false)}
           />
         )}

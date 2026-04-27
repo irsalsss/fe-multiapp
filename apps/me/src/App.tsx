@@ -103,7 +103,7 @@ function App() {
                 <a href="https://github.com/irsalsss/irsal-notes" target="_blank" rel="noopener noreferrer" title="View Source" className="text-gray-600 hover:text-white transition-colors">
                   <GitHubLogoIcon className="w-4 h-4" />
                 </a>
-                <a href="https://notes.irsal.me" target="_blank" rel="noopener noreferrer" title="Live Preview" className="text-gray-600 hover:text-white transition-colors">
+                <a href="https://irsal-notes-web.vercel.app" target="_blank" rel="noopener noreferrer" title="Live Preview" className="text-gray-600 hover:text-white transition-colors">
                   <ExternalLinkIcon className="w-4 h-4" />
                 </a>
               </div>

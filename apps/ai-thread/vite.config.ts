@@ -10,5 +10,13 @@ export default defineConfig({
     react(), 
     tailwindcss(), 
     svgr()
-  ]
+  ],
+  server: {
+    proxy: {
+      '/app/me': {
+        target: 'http://localhost:5174',
+        changeOrigin: true,
+      }
+    }
+  }
 });

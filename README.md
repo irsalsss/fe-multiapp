@@ -11,6 +11,10 @@ This repository uses **npm workspaces** and **Lerna** to manage multiple fronten
 - `packages/ui-kit/` - (Coming soon) Shared Tailwind UI components.
 - `packages/core/` - (Coming soon) Shared hooks, Zustand stores, and API services.
 
+## Related Repositories
+
+- **Backend:** [be-multiapp](https://github.com/irsalsss/be-multiapp)
+
 ## Installation
 
 Run the install command from the root directory to install dependencies and link all workspaces automatically:

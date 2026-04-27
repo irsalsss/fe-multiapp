@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "lerna run dev --scope=@app/ai-thread --stream",
+    "dev": "lerna run dev --scope={@app/ai-thread,@app/me} --parallel --stream",
     "build": "lerna run build",
     "lint": "eslint .",
     "preview": "lerna run preview --scope=@app/ai-thread --stream",

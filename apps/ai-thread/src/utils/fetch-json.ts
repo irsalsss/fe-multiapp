@@ -46,6 +46,7 @@ export const fetchJson = async <JSONDataType = unknown>(
   if (clerkSession) {
     const token = clerkSession.split('=')[1];
     headers.set('Authorization', `Bearer ${token}`);
+    headers.delete(COOKIE_X_GUEST_ID);
   }
 
   // Prepare the request configuration

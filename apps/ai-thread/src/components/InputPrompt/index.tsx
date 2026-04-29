@@ -221,7 +221,7 @@ const InputPrompt = () => {
           'w-full rounded-xl bg-white/5 backdrop-blur-sm border border-white/10',
           'pl-[20px] pr-[56px] py-[20px]',
           'md:h-[64px] md:placeholder:text-[16px] md:text-[16px]',
-          'placeholder:text-white/60 h-[56px] placeholder:text-[12px] text-[12px] text-white',
+          'placeholder:text-white/60 h-[56px] placeholder:text-[16px] text-[16px] text-white',
           'focus:outline-none focus:border-white/30 focus:bg-white/10',
           'transition-all duration-200 animate-pulse hover:animate-none focus:animate-none',
           'hover:border-blue-400/50 focus:border-blue-400/70',

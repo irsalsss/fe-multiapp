@@ -40,16 +40,13 @@ export const setConversationsQueryData = (queryClient: QueryClient, conversation
 
 export const addConversationQueryData = (queryClient: QueryClient, conversationId: string, title: string) => {
   queryClient.setQueryData([QUERY_KEY_CONVERSATIONS], (oldData: GetConversationsData | undefined) => {
-    if (!oldData?.conversations) {
-      return oldData;
-    }
 
     const newConversations = [{
       id: conversationId,
       title,
       description: '',
       createdAt: new Date().toLocaleString(),
-    }, ...oldData.conversations];
+    }, ...(oldData?.conversations || [])];
 
     return { ...oldData, conversations: newConversations };
   });

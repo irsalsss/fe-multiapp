@@ -97,7 +97,7 @@ const ThreadRoom = () => {
             <AnswerBubble
               key="loading-answer"
               answer={answerAI}
-              date={new Date().toLocaleString()}
+              date={new Date().toISOString()}
               index={0}
             />
           )}

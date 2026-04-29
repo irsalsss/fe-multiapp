@@ -7,8 +7,6 @@ import QuestionBubble from '../../components/QuestionBubble';
 import { useUser } from '@clerk/clerk-react';
 
 const AINewThreadContainer = () => {
-  const nowDate = new Date().toLocaleString();
-
   const { user } = useUser();
   const isGuest = !user;
   const { question, isLoadingAnswer } = useSendAIMessageStore(
@@ -36,7 +34,7 @@ const AINewThreadContainer = () => {
         >
           <div className="flex flex-col gap-12 items-start md:w-[65%] w-[75%]">
             <QuestionBubble
-              date={nowDate}
+              date={new Date().toISOString()}
               key={'new-question'}
               message={question}
               index={1}

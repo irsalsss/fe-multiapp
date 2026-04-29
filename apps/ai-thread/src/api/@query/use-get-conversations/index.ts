@@ -28,7 +28,7 @@ export const setConversationsQueryData = (queryClient: QueryClient, conversation
         return { 
           ...conversation, 
           description: answer,
-          updatedAt: new Date().toLocaleString()
+          updatedAt: new Date().toISOString()
         };
       }
       return conversation;
@@ -45,7 +45,7 @@ export const addConversationQueryData = (queryClient: QueryClient, conversationI
       id: conversationId,
       title,
       description: '',
-      createdAt: new Date().toLocaleString(),
+      createdAt: new Date().toISOString(),
     }, ...(oldData?.conversations || [])];
 
     return { ...oldData, conversations: newConversations };
@@ -62,7 +62,7 @@ export const setSaveUnsaveConversationQueryData = (queryClient: QueryClient, con
       conv.id === conversationId ? { 
         ...conv, 
         isSaved,
-        updatedAt: new Date().toLocaleString()
+        updatedAt: new Date().toISOString()
       } : conv
     );
 

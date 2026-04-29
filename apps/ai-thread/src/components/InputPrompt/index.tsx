@@ -97,7 +97,7 @@ const InputPrompt = () => {
             { id, answer },
             {
               onSuccess: (lastThread: ThreadMessage) => {
-                const now = new Date().toLocaleString();
+                const now = new Date().toISOString();
                 setQuestion('');
                 setAnswer('');
                 setIsLoadingAnswer(false);
@@ -106,7 +106,7 @@ const InputPrompt = () => {
                   {
                     ...lastThread,
                     id: now,
-                    createdAt: new Date().toLocaleString(),
+                    createdAt: new Date().toISOString(),
                   },
                 ]);
               },
@@ -144,7 +144,7 @@ const InputPrompt = () => {
         { id: conversationId, question: inputValue },
         {
           onSuccess: (lastThread: ThreadMessage) => {
-            const now = new Date().toLocaleString();
+            const now = new Date().toISOString();
             setUpdateAnswerThreadQueryData(queryClient, conversationId, {
               ...lastThread,
               id: now,
@@ -171,7 +171,7 @@ const InputPrompt = () => {
           void navigate(`${ROUTE_AI_THREAD}/${id}`);
           addConversationQueryData(queryClient, id, inputValue);
 
-          const now = new Date().toLocaleString();
+          const now = new Date().toISOString();
           const threadMessage: ThreadMessage[] = [
             {
               id: now,

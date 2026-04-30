@@ -31,6 +31,8 @@ const App = () => {
       <ClerkProvider 
         publishableKey={PUBLISHABLE_KEY}
         afterSignOutUrl={window.location.origin + import.meta.env.BASE_URL}
+        signInFallbackRedirectUrl={window.location.origin + import.meta.env.BASE_URL}
+        signUpFallbackRedirectUrl={window.location.origin + import.meta.env.BASE_URL}
       >
         <Routes>
           {/* Authenticated Routes */}
@@ -45,7 +47,15 @@ const App = () => {
 
           {/* Unauthenticated Routes */}
           <Route element={<UnauthenticatedLayout />}>
-            <Route path={ROUTE_SIGN_IN} element={<SignIn />} />
+            <Route 
+              path={ROUTE_SIGN_IN} 
+              element={
+                <SignIn 
+                  fallbackRedirectUrl={window.location.origin + import.meta.env.BASE_URL} 
+                  signUpFallbackRedirectUrl={window.location.origin + import.meta.env.BASE_URL}
+                />
+              } 
+            />
           </Route>
         </Routes>
       </ClerkProvider>

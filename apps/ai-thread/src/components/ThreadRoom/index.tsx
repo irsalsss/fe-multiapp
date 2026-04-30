@@ -13,6 +13,7 @@ import ThreadSpinner from '../ThreadSpinner';
 import BubbleGap from '../BubbleGap';
 import AnswerError from '../AnswerError';
 import { useUser } from '@clerk/clerk-react';
+import { ROUTE_AI_THREAD } from '../../const/routes';
 
 const ThreadRoom = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const ThreadRoom = () => {
 
   const { data: detailConversation } = useGetThreadQuery(conversationId, {
     onError: () => {
-      navigate('/app/ai-thread');
+      navigate(ROUTE_AI_THREAD);
     },
   });
 

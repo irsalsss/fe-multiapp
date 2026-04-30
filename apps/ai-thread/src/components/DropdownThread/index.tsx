@@ -6,7 +6,6 @@ import {
 import KebabMenuIcon from '../../assets/icons/kebab-menu-black.svg?react';
 import { twJoin } from 'tailwind-merge';
 import ButtonIcon from '../ButtonIcon';
-import { ButtonSize, ButtonType } from '../ButtonIcon/types';
 import { useState } from 'react';
 import { useClickOutside } from '@mantine/hooks';
 import { useDeleteConversation } from '../../api/@mutation/use-delete-conversation';
@@ -98,8 +97,8 @@ const DropdownThread = () => {
   return (
     <div className="relative">
       <ButtonIcon
-        type={ButtonType.Tertiary}
-        size={ButtonSize.Medium}
+        type="tertiary"
+        size="medium"
         icon={
           <KebabMenuIcon className="cursor-pointer hover:scale-110 transition-all duration-300" />
         }

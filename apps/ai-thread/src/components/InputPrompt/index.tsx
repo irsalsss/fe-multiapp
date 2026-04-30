@@ -1,6 +1,5 @@
 import Send from '../../assets/icons/send.svg?react';
 import ButtonIcon from '../ButtonIcon';
-import { ButtonSize, ButtonType } from '../ButtonIcon/types';
 import { twJoin } from 'tailwind-merge';
 import { useCallback, useMemo, useState } from 'react';
 import useGoogleAI from '../../hooks/useGoogleAI';
@@ -203,8 +202,8 @@ const InputPrompt = () => {
   return (
     <div className="relative w-full">
       <ButtonIcon
-        type={ButtonType.Tertiary}
-        size={ButtonSize.Medium}
+        type="tertiary"
+        size="medium"
         icon={<Send />}
         className="absolute top-[50%] translate-y-[-50%] right-[12px] rounded-lg h-8 w-8 z-10"
         onClick={() => {

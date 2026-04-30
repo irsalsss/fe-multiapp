@@ -54,7 +54,11 @@ Once running, the Nginx Gateway will route traffic seamlessly. You can access th
 - **Infrastructure:** Lerna, Docker, Nginx
 - **Framework:** React 19, TypeScript, Vite
 - **Styling:** TailwindCSS v4
+- **Component Styling:**
+  - **[Class Variance Authority (CVA)](https://cva.style/)**: We use CVA to manage component variants (like types and sizes) in a declarative and type-safe manner, eliminating the need for complex conditional logic within component bodies.
+  - **[Tailwind Merge (twMerge)](https://github.com/dcastil/tailwind-merge)**: We use `twMerge` to intelligently merge Tailwind CSS classes, ensuring that variant-specific styles or custom `className` props correctly override base styles without conflicts.
 - **State Management:** TanStack React Query (Server), Zustand (Client)
+
 - **Routing:** React Router DOM
 - **Authentication:** Clerk
 - **AI Integration:** Google Gemini API (via backend)
